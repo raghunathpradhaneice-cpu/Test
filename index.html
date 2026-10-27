@@ -23,8 +23,126 @@ html {
 body {
     margin: 0;
     color: #272321;
-    background: #171615;
+    background: linear-gradient(180deg, #171615 0%, #261d1c 18%, #f7efec 18%, #f7efec 100%);
     font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
+}
+
+.floating-hearts {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-hearts span {
+    position: absolute;
+    bottom: -80px;
+    font-size: clamp(18px, 3vw, 36px);
+    color: rgba(255, 145, 165, 0.7);
+    animation: float-up 18s linear infinite;
+    text-shadow: 0 0 18px rgba(255, 190, 205, 0.8);
+}
+
+.floating-hearts span:nth-child(1) { left: 8%; animation-delay: 0s; }
+.floating-hearts span:nth-child(2) { left: 22%; animation-delay: 4s; }
+.floating-hearts span:nth-child(3) { left: 38%; animation-delay: 2s; }
+.floating-hearts span:nth-child(4) { left: 52%; animation-delay: 7s; }
+.floating-hearts span:nth-child(5) { left: 68%; animation-delay: 3s; }
+.floating-hearts span:nth-child(6) { left: 82%; animation-delay: 6s; }
+
+.note-links {
+    position: relative;
+    z-index: 1;
+    padding: 90px 24px 120px;
+    background: linear-gradient(180deg, #f3ece7 0%, #f9f1ed 100%);
+}
+
+.note-links__inner {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.note-links__heading {
+    margin: 0 0 24px;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 400;
+    text-align: center;
+}
+
+.note-links__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.note-card {
+    display: flex;
+    min-height: 210px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 22px 18px;
+    border: 1px solid rgba(141, 93, 88, .18);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, .52);
+    box-shadow: 0 18px 35px rgba(130, 90, 85, .08);
+    backdrop-filter: blur(6px);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(182, 95, 100, .38);
+    box-shadow: 0 24px 44px rgba(115, 76, 72, .12);
+}
+
+.note-card__tag {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(182, 95, 100, .12);
+    color: #8d5d58;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.note-card h3 {
+    margin: 18px 0 10px;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+}
+
+.note-card p {
+    margin: 0;
+    color: #554b48;
+    font-size: 15px;
+    line-height: 1.72;
+}
+
+.note-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    color: #8d5d58;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.note-card a:hover {
+    color: #5c2f32;
 }
 
 .opening {
@@ -109,6 +227,14 @@ body {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
+}
+
+.emoji-burst {
+    display: inline-block;
+    margin-left: 6px;
+    color: #f0c4bd;
+    font-size: 0.9em;
+    animation: pulse 2.5s ease-in-out infinite;
 }
 
 .opening h1 {
@@ -242,6 +368,31 @@ footer {
     }
 }
 
+@keyframes float-up {
+    0% {
+        transform: translateY(0) scale(.9) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.2) rotate(18deg);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.18);
+        opacity: .8;
+    }
+}
+
 @media (max-width: 600px) {
     .opening {
         min-height: 640px;
@@ -310,6 +461,14 @@ footer {
 </head>
 
 <body>
+<div class="floating-hearts" aria-hidden="true">
+    <span>♥</span>
+    <span>♡</span>
+    <span>♥</span>
+    <span>♡</span>
+    <span>♥</span>
+    <span>♡</span>
+</div>
 <main>
     <section class="opening" aria-labelledby="opening-title">
         <img class="opening__image" src="photo.jpg" alt="A portrait surrounded by flowers">
@@ -318,10 +477,10 @@ footer {
             <span>A LITTLE NOTE FROM THE HEART</span>
         </div>
         <div class="opening__copy">
-            <p class="eyebrow">Some moments stay with us</p>
-            <h1 id="opening-title">Some people<br>feel like <em>home.</em></h1>
-            <p class="opening__intro">And somehow, you make even ordinary days feel like something worth remembering.</p>
-            <a class="read-note" href="#letter">Read my note <span aria-hidden="true">&darr;</span></a>
+            <p class="eyebrow">💗 Some moments stay with us</p>
+            <h1 id="opening-title">Some people<br>feel like <em>home</em><span class="emoji-burst">♥</span></h1>
+            <p class="opening__intro">And somehow, you make even ordinary days feel like something worth remembering ✨💫</p>
+            <a class="read-note" href="#letter">Read my note <span aria-hidden="true">→</span></a>
         </div>
         <div class="opening__bottom" aria-hidden="true">
             <span>SHOT WITH LOVE</span>
@@ -331,21 +490,135 @@ footer {
 
     <section class="letter" id="letter" aria-labelledby="letter-title">
         <div class="letter__inner">
-            <p class="letter__eyebrow">To someone extraordinary</p>
+            <p class="letter__eyebrow">💌 To someone extraordinary</p>
             <p class="letter__salutation">Dear you,</p>
-            <h2 id="letter-title">Thank you for being in my life.</h2>
-            <p>Some people enter our lives and make everything a little more beautiful. You are one of those people.</p>
-            <p>Thank you for your kindness, your smile, your presence, and all those little moments that mean more than words can ever explain.</p>
-            <p>Life feels more special because you are a part of it. I may not say it every day, but I am truly grateful to have you in my life.</p>
-            <p>No matter where life takes us, I hope you always remember how special you are to me.</p>
+            <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
+            <p>We did not talk much, but I felt something good and beautiful about you from the very beginning — the way you carry yourself, the calm in your presence, and the kind of energy you bring into a room. I had heard a lot of things about you before meeting you, and all of them turned out to be true.</p>
+            <p>There is something about you that feels different, something that makes me feel at ease and deeply connected. I can't promise you the whole world, but I promise I will fight with the world for you, because you are someone worth standing up for and choosing every day.</p>
+            <p>And if I am honest, there is a place in my heart that already feels like home when I think of us. I can see us building a life together, and I believe with all my heart that one day, we are going to get married. I want to be there for you in every season of life — in your joys, your worries, your dreams, and the quiet moments in between.</p>
+            <p>I promise I will be there for you, through the good days and the hard ones, with love, patience, and my whole heart. You deserve someone who stays, someone who chooses you every day, and I want to be that person.</p>
             <div class="signoff">
-                <span>With all my heart,</span>
-                <p class="signature">Forever grateful for you</p>
-                <span class="seal" aria-hidden="true">&hearts;</span>
+                <span>With all my heart 💕</span>
+                <p class="signature">Your forever person</p>
+                <span class="seal" aria-hidden="true">♥♥♥</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="note-links" aria-labelledby="notes-title">
+        <div class="note-links__inner">
+            <h2 class="note-links__heading" id="notes-title">💌 A few little notes for you</h2>
+            <div class="note-links__grid">
+                <article class="note-card">
+                    <span class="note-card__tag">💞 First meeting</span>
+                    <div>
+                        <h3>That day</h3>
+                        <p>I met you and I liked you as a person before I even knew how much you would mean to me.</p>
+                    </div>
+                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. I cannot promise the world to you, but I promise I will fight with the world for you. ✨">Open note →</a>
+                </article>
+
+                <article class="note-card">
+                    <span class="note-card__tag">💖 Promise</span>
+                    <div>
+                        <h3>Always</h3>
+                        <p>I want to be the person who stays, supports you, and keeps showing up for you.</p>
+                    </div>
+                    <a href="#" data-message="I promise I will be there for you. In your happy moments, your tired days, your fears, and your dreams, I will be there. I am not just saying it — I mean it with my whole heart. ❤️">Open note →</a>
+                </article>
+
+                <article class="note-card">
+                    <span class="note-card__tag">💍 Future</span>
+                    <div>
+                        <h3>Forever</h3>
+                        <p>I can already imagine the life we could build together — soft, happy, and full of love.</p>
+                    </div>
+                    <a href="#" data-message="I can already picture us laughing in the little moments, building a life full of peace, love, and a forever kind of happiness. I believe we are meant to be, and I am ready to choose you every day. 💫">Open note →</a>
+                </article>
+
+                <article class="note-card">
+                    <span class="note-card__tag">😂 Funny</span>
+                    <div>
+                        <h3>Chaos</h3>
+                        <p>In case I forget to be romantic, here is your reminder that I still think you are my favorite person.</p>
+                    </div>
+                    <a href="#" data-message="You are the only person who can make my heart do cartwheels and my brain forget basic logic. I am not saying I am obsessed, but I would absolutely choose your smile over a perfect schedule. 😄">Open silly note →</a>
+                </article>
             </div>
         </div>
     </section>
 </main>
-<footer>Made of memories and a little bit of magic</footer>
+<footer>Made of memories, laughter, and a little bit of magic</footer>
+
+<script>
+  const noteLinks = document.querySelectorAll('[data-message]');
+
+  noteLinks.forEach((link) => {
+    link.addEventListener('click', function (event) {
+      event.preventDefault();
+      const message = this.dataset.message;
+      const popup = window.open('', 'lovePopup', 'width=420,height=420,top=120,left=120');
+
+      if (!popup) {
+        alert('Pop-up blocked. Please allow pop-ups to open the note!');
+        return;
+      }
+
+      popup.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Little note</title>
+          <style>
+            body {
+              margin: 0;
+              min-height: 100vh;
+              display: grid;
+              place-items: center;
+              background: linear-gradient(135deg, #1d1515, #452e30 60%, #7a4d4f);
+              color: #fff7f2;
+              font-family: Arial, sans-serif;
+              padding: 24px;
+            }
+            .card {
+              width: min(100%, 330px);
+              padding: 28px 22px 22px;
+              border-radius: 26px;
+              background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+              box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+              border: 1px solid rgba(255,255,255,0.15);
+            }
+            .badge {
+              display: inline-block;
+              margin-bottom: 12px;
+              padding: 8px 12px;
+              border-radius: 999px;
+              background: rgba(255,255,255,0.12);
+              font-size: 10px;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+            }
+            p {
+              margin: 0;
+              line-height: 1.8;
+              font-size: 15px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <div class="badge">💌 For you</div>
+            <p>${message}</p>
+            <div style="margin-top: 20px; font-size: 22px; text-align: center;">💞 ✨ 💖</div>
+          </div>
+          </body>
+        </html>
+      `);
+      popup.document.close();
+    });
+  });
+</script>
 </body>
 </html>

@@ -215,6 +215,66 @@ body {
     color: #5c2f32;
 }
 
+.note-card a:focus-visible,
+.note-view__close:focus-visible {
+    outline: 3px solid #b65f64;
+    outline-offset: 4px;
+}
+
+.note-view {
+    max-width: 720px;
+    margin: 32px auto 0;
+    padding: 30px clamp(22px, 5vw, 48px);
+    border: 1px solid rgba(141, 93, 88, .2);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, .72);
+    box-shadow: 0 18px 35px rgba(130, 90, 85, .1);
+    text-align: center;
+}
+
+.note-view[hidden] {
+    display: none;
+}
+
+.note-view__tag {
+    margin: 0 0 12px;
+    color: #8d5d58;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.note-view h3 {
+    margin: 0 0 16px;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(30px, 5vw, 42px);
+    font-weight: 400;
+}
+
+.note-view__message {
+    margin: 0 auto;
+    color: #554b48;
+    font-size: 17px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.note-view__close {
+    min-height: 44px;
+    margin-top: 22px;
+    padding: 10px 18px;
+    border: 1px solid rgba(141, 93, 88, .3);
+    border-radius: 999px;
+    color: #7d3c48;
+    background: #fffaf5;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
 .opening {
     position: relative;
     display: flex;
@@ -476,6 +536,42 @@ footer {
 }
 
 @media (max-width: 600px) {
+    .note-links {
+        padding: 64px 18px 78px;
+    }
+
+    .note-links__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .note-card {
+        min-height: 0;
+        padding: 21px 20px 18px;
+        border-radius: 22px;
+    }
+
+    .note-card:hover {
+        transform: none;
+    }
+
+    .note-card a {
+        min-height: 44px;
+        margin-top: 12px;
+    }
+
+    .note-view {
+        margin-top: 24px;
+        padding: 26px 20px;
+        border-radius: 22px;
+    }
+
+    .note-view__message {
+        font-size: 16px;
+        line-height: 1.75;
+    }
+
     .music-widget {
         top: calc(64px + env(safe-area-inset-top, 0px));
         right: calc(12px + env(safe-area-inset-right, 0px));
@@ -660,6 +756,12 @@ footer {
                     <a href="#" data-message="You are the only person who can make my heart do cartwheels and my brain forget basic logic. I am not saying I am obsessed, but I would absolutely choose your smile over a perfect schedule. 😄">Open silly note →</a>
                 </article>
             </div>
+            <section class="note-view" id="note-view" aria-labelledby="note-view-title" aria-live="polite" hidden>
+                <p class="note-view__tag" id="note-view-tag"></p>
+                <h3 id="note-view-title" tabindex="-1"></h3>
+                <p class="note-view__message" id="note-view-message"></p>
+                <button class="note-view__close" id="note-view-close" type="button">Close note</button>
+            </section>
         </div>
     </section>
 </main>
@@ -798,72 +900,32 @@ footer {
   });
 
   const noteLinks = document.querySelectorAll('[data-message]');
+  const noteView = document.getElementById('note-view');
+  const noteViewTag = document.getElementById('note-view-tag');
+  const noteViewTitle = document.getElementById('note-view-title');
+  const noteViewMessage = document.getElementById('note-view-message');
+  const noteViewClose = document.getElementById('note-view-close');
+  let activeNoteLink = null;
 
   noteLinks.forEach((link) => {
     link.addEventListener('click', function (event) {
       event.preventDefault();
-      const message = this.dataset.message;
-      const popup = window.open('', 'lovePopup', 'width=420,height=420,top=120,left=120');
-
-      if (!popup) {
-        alert('Pop-up blocked. Please allow pop-ups to open the note!');
-        return;
-      }
-
-      popup.document.write(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Little note</title>
-          <style>
-            body {
-              margin: 0;
-              min-height: 100vh;
-              display: grid;
-              place-items: center;
-              background: linear-gradient(135deg, #1d1515, #452e30 60%, #7a4d4f);
-              color: #fff7f2;
-              font-family: Arial, sans-serif;
-              padding: 24px;
-            }
-            .card {
-              width: min(100%, 330px);
-              padding: 28px 22px 22px;
-              border-radius: 26px;
-              background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-              box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-              border: 1px solid rgba(255,255,255,0.15);
-            }
-            .badge {
-              display: inline-block;
-              margin-bottom: 12px;
-              padding: 8px 12px;
-              border-radius: 999px;
-              background: rgba(255,255,255,0.12);
-              font-size: 10px;
-              letter-spacing: 0.12em;
-              text-transform: uppercase;
-            }
-            p {
-              margin: 0;
-              line-height: 1.8;
-              font-size: 15px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="card">
-            <div class="badge">💌 For you</div>
-            <p>${message}</p>
-            <div style="margin-top: 20px; font-size: 22px; text-align: center;">💞 ✨ 💖</div>
-          </div>
-          </body>
-        </html>
-      `);
-      popup.document.close();
+      activeNoteLink = this;
+      const card = this.closest('.note-card');
+      noteViewTag.textContent = card.querySelector('.note-card__tag').textContent;
+      noteViewTitle.textContent = card.querySelector('h3').textContent;
+      noteViewMessage.textContent = this.dataset.message;
+      noteView.hidden = false;
+      noteView.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      noteViewTitle.focus({ preventScroll: true });
     });
+  });
+
+  noteViewClose.addEventListener('click', () => {
+    noteView.hidden = true;
+    if (activeNoteLink) {
+      activeNoteLink.focus();
+    }
   });
 </script>
 </body>

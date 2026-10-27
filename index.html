@@ -28,6 +28,75 @@ body {
     overflow-x: hidden;
 }
 
+.music-widget {
+    position: fixed;
+    top: 72px;
+    right: 18px;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.music-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff3f0 0%, #f5c6d1 35%, #d77a8a 100%);
+    color: #5f2c33;
+    box-shadow: 0 18px 32px rgba(144, 60, 74, 0.25), inset 0 0 16px rgba(255,255,255,0.55);
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.music-toggle:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 20px 38px rgba(144, 60, 74, 0.3), inset 0 0 16px rgba(255,255,255,0.7);
+}
+
+.music-toggle.is-playing {
+    box-shadow: 0 0 0 6px rgba(255, 190, 205, 0.22), 0 16px 30px rgba(144, 60, 74, 0.25);
+}
+
+.music-toggle .heart-icon {
+    display: block;
+    transform: translateY(-1px);
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.music-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(38, 29, 28, 0.68);
+    box-shadow: 0 16px 30px rgba(18, 12, 13, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.music-panel label {
+    color: #fffaf5;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.music-panel input[type="range"] {
+    width: 110px;
+    accent-color: #f4b3bf;
+}
+
 .floating-hearts {
     position: fixed;
     inset: 0;
@@ -393,7 +462,43 @@ footer {
     }
 }
 
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1) translateY(-1px);
+    }
+    25% {
+        transform: scale(1.12) translateY(-1px);
+    }
+    50% {
+        transform: scale(0.96) translateY(-1px);
+    }
+}
+
 @media (max-width: 600px) {
+    .music-widget {
+        top: calc(64px + env(safe-area-inset-top, 0px));
+        right: calc(12px + env(safe-area-inset-right, 0px));
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .music-toggle {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+        font-size: 24px;
+    }
+
+    .music-panel {
+        gap: 8px;
+        padding: 7px 9px;
+    }
+
+    .music-panel input[type="range"] {
+        width: clamp(64px, 22vw, 100px);
+    }
+
     .opening {
         min-height: 640px;
         height: 88svh;
@@ -461,6 +566,15 @@ footer {
 </head>
 
 <body>
+<div class="music-widget" aria-label="Music controls">
+    <div class="music-panel">
+        <label for="volume-slider">Vol</label>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.55" aria-label="Volume control">
+    </div>
+    <button class="music-toggle" id="music-toggle" type="button" aria-label="Play romantic music">
+        <span class="heart-icon" aria-hidden="true">♥</span>
+    </button>
+</div>
 <div class="floating-hearts" aria-hidden="true">
     <span>♥</span>
     <span>♡</span>
@@ -551,6 +665,128 @@ footer {
 <footer>Made of memories, laughter, and a little bit of magic</footer>
 
 <script>
+  const musicToggle = document.getElementById('music-toggle');
+  const volumeSlider = document.getElementById('volume-slider');
+  let audioContext = null;
+  let masterGain = null;
+  let playbackTimer = null;
+  let currentStep = 0;
+  let nextNoteTime = 0;
+  let droneNodes = [];
+
+  const melody = [
+    293.66, 329.63, 369.99, 440, 493.88, 440, 369.99, 329.63,
+    293.66, 369.99, 440, 493.88, 587.33, 493.88, 440, 369.99
+  ];
+  const chords = [
+    [146.83, 220, 293.66],
+    [110, 164.81, 220],
+    [123.47, 185, 246.94],
+    [98, 146.83, 196]
+  ];
+  const stepDuration = 0.42;
+
+  function initializeAudio() {
+    if (!window.AudioContext) {
+      throw new Error('Web Audio is not supported by this browser.');
+    }
+
+    audioContext = new AudioContext();
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = Number(volumeSlider.value);
+    masterGain.connect(audioContext.destination);
+  }
+
+  function playNote(frequency, startTime, duration, volume, waveform) {
+    const oscillator = audioContext.createOscillator();
+    const noteGain = audioContext.createGain();
+    oscillator.type = waveform;
+    oscillator.frequency.setValueAtTime(frequency, startTime);
+    noteGain.gain.setValueAtTime(0.0001, startTime);
+    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.035);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    oscillator.connect(noteGain);
+    noteGain.connect(masterGain);
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration + 0.02);
+  }
+
+  function startDrone() {
+    [73.42, 110].forEach((frequency) => {
+      const oscillator = audioContext.createOscillator();
+      const droneGain = audioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      droneGain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+      droneGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.8);
+      oscillator.connect(droneGain);
+      droneGain.connect(masterGain);
+      oscillator.start();
+      droneNodes.push({ oscillator, gain: droneGain });
+    });
+  }
+
+  function stopDrone() {
+    const stopTime = audioContext.currentTime + 0.3;
+    droneNodes.forEach(({ oscillator, gain }) => {
+      gain.gain.cancelScheduledValues(audioContext.currentTime);
+      gain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.06);
+      oscillator.stop(stopTime);
+    });
+    droneNodes = [];
+  }
+
+  function scheduleMusic() {
+    while (nextNoteTime < audioContext.currentTime + 0.15) {
+      const step = currentStep % melody.length;
+      playNote(melody[step], nextNoteTime, stepDuration * 0.9, 0.11, 'sine');
+
+      if (step % 2 === 0) {
+        const chord = chords[Math.floor(step / 4)];
+        playNote(chord[(step / 2) % chord.length], nextNoteTime, 0.72, 0.07, 'triangle');
+      }
+
+      currentStep++;
+      nextNoteTime += stepDuration;
+    }
+  }
+
+  musicToggle.addEventListener('click', async () => {
+    try {
+      if (!audioContext) {
+        initializeAudio();
+      }
+      await audioContext.resume();
+
+      if (playbackTimer !== null) {
+        clearInterval(playbackTimer);
+        playbackTimer = null;
+        stopDrone();
+        musicToggle.classList.remove('is-playing');
+        musicToggle.setAttribute('aria-label', 'Play romantic music');
+        return;
+      }
+
+      currentStep = 0;
+      nextNoteTime = audioContext.currentTime + 0.05;
+      startDrone();
+      scheduleMusic();
+      playbackTimer = setInterval(scheduleMusic, 100);
+      musicToggle.classList.add('is-playing');
+      musicToggle.setAttribute('aria-label', 'Pause romantic music');
+    } catch (error) {
+      musicToggle.classList.remove('is-playing');
+      musicToggle.setAttribute('aria-label', 'Play romantic music');
+      console.error('Unable to play romantic music:', error);
+    }
+  });
+
+  volumeSlider.addEventListener('input', (event) => {
+    if (masterGain) {
+      masterGain.gain.value = Number(event.target.value);
+    }
+  });
+
   const noteLinks = document.querySelectorAll('[data-message]');
 
   noteLinks.forEach((link) => {

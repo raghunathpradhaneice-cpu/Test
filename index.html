@@ -76,11 +76,11 @@ body {
 .music-panel {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px 8px 10px;
+    gap: 10px;
+    padding: 8px 12px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 999px;
-    background: rgba(38, 29, 28, 0.68);
+    background: rgba(38, 29, 28, 0.78);
     box-shadow: 0 16px 30px rgba(18, 12, 13, 0.18);
     backdrop-filter: blur(8px);
 }
@@ -88,13 +88,14 @@ body {
 .music-panel label {
     color: #fffaf5;
     font-size: 11px;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     text-transform: uppercase;
 }
 
 .music-panel input[type="range"] {
     width: 110px;
     accent-color: #f4b3bf;
+    cursor: pointer;
 }
 
 .floating-hearts {
@@ -491,7 +492,7 @@ footer {
     }
 
     .music-panel {
-        gap: 8px;
+        gap: 7px;
         padding: 7px 9px;
     }
 
@@ -568,8 +569,8 @@ footer {
 <body>
 <div class="music-widget" aria-label="Music controls">
     <div class="music-panel">
-        <label for="volume-slider">Vol</label>
-        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.55" aria-label="Volume control">
+        <label for="volume-slider">Volume</label>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.45" aria-label="Music volume">
     </div>
     <button class="music-toggle" id="music-toggle" type="button" aria-label="Play romantic music">
         <span class="heart-icon" aria-hidden="true">♥</span>
@@ -672,78 +673,87 @@ footer {
   let playbackTimer = null;
   let currentStep = 0;
   let nextNoteTime = 0;
-  let droneNodes = [];
 
   const melody = [
-    293.66, 329.63, 369.99, 440, 493.88, 440, 369.99, 329.63,
-    293.66, 369.99, 440, 493.88, 587.33, 493.88, 440, 369.99
+    329.63, 369.99, 415.30, 440, 0, 415.30, 369.99, 329.63,
+    277.18, 329.63, 369.99, 0, 329.63, 277.18, 246.94, 0,
+    220, 277.18, 329.63, 369.99, 0, 329.63, 277.18, 246.94,
+    277.18, 329.63, 369.99, 415.30, 440, 0, 415.30, 369.99
   ];
   const chords = [
-    [146.83, 220, 293.66],
-    [110, 164.81, 220],
-    [123.47, 185, 246.94],
-    [98, 146.83, 196]
+    [220, 277.18, 329.63, 415.30],
+    [185, 220, 277.18, 369.99],
+    [146.83, 185, 220, 277.18],
+    [164.81, 207.65, 246.94, 329.63]
   ];
-  const stepDuration = 0.42;
+  const bassNotes = [110, 92.5, 73.42, 82.41];
+  const stepDuration = 0.62;
 
   function initializeAudio() {
-    if (!window.AudioContext) {
+    const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextConstructor) {
       throw new Error('Web Audio is not supported by this browser.');
     }
 
-    audioContext = new AudioContext();
+    audioContext = new AudioContextConstructor();
     masterGain = audioContext.createGain();
     masterGain.gain.value = Number(volumeSlider.value);
     masterGain.connect(audioContext.destination);
   }
 
-  function playNote(frequency, startTime, duration, volume, waveform) {
+  function playNote(frequency, startTime, duration, volume, waveform, filterFrequency) {
     const oscillator = audioContext.createOscillator();
     const noteGain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+
     oscillator.type = waveform;
     oscillator.frequency.setValueAtTime(frequency, startTime);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(filterFrequency, startTime);
     noteGain.gain.setValueAtTime(0.0001, startTime);
-    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.035);
+    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.04);
     noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-    oscillator.connect(noteGain);
+
+    oscillator.connect(filter);
+    filter.connect(noteGain);
     noteGain.connect(masterGain);
     oscillator.start(startTime);
-    oscillator.stop(startTime + duration + 0.02);
+    oscillator.stop(startTime + duration + 0.03);
   }
 
-  function startDrone() {
-    [73.42, 110].forEach((frequency) => {
+  function playPad(chord, startTime) {
+    chord.forEach((frequency) => {
       const oscillator = audioContext.createOscillator();
-      const droneGain = audioContext.createGain();
+      const padGain = audioContext.createGain();
       oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      droneGain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-      droneGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 0.8);
-      oscillator.connect(droneGain);
-      droneGain.connect(masterGain);
-      oscillator.start();
-      droneNodes.push({ oscillator, gain: droneGain });
+      oscillator.frequency.setValueAtTime(frequency / 2, startTime);
+      padGain.gain.setValueAtTime(0.0001, startTime);
+      padGain.gain.linearRampToValueAtTime(0.018, startTime + 0.55);
+      padGain.gain.setTargetAtTime(0.0001, startTime + stepDuration * 3.5, 0.35);
+      oscillator.connect(padGain);
+      padGain.connect(masterGain);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + stepDuration * 4 + 0.2);
     });
-  }
-
-  function stopDrone() {
-    const stopTime = audioContext.currentTime + 0.3;
-    droneNodes.forEach(({ oscillator, gain }) => {
-      gain.gain.cancelScheduledValues(audioContext.currentTime);
-      gain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.06);
-      oscillator.stop(stopTime);
-    });
-    droneNodes = [];
   }
 
   function scheduleMusic() {
-    while (nextNoteTime < audioContext.currentTime + 0.15) {
+    while (nextNoteTime < audioContext.currentTime + 0.2) {
       const step = currentStep % melody.length;
-      playNote(melody[step], nextNoteTime, stepDuration * 0.9, 0.11, 'sine');
+      const chordIndex = Math.floor(step / 4) % chords.length;
 
-      if (step % 2 === 0) {
-        const chord = chords[Math.floor(step / 4)];
-        playNote(chord[(step / 2) % chord.length], nextNoteTime, 0.72, 0.07, 'triangle');
+      if (step % 4 === 0) {
+        playPad(chords[chordIndex], nextNoteTime);
+        playNote(bassNotes[chordIndex], nextNoteTime, stepDuration * 2.8, 0.055, 'sine', 420);
+      }
+
+      if (melody[step] > 0) {
+        playNote(melody[step], nextNoteTime, stepDuration * 1.12, 0.085, 'triangle', 1850);
+      }
+
+      if (step % 2 === 1) {
+        const arpeggioNote = chords[chordIndex][Math.floor(step / 2) % 4];
+        playNote(arpeggioNote * 2, nextNoteTime + 0.16, stepDuration * 0.55, 0.022, 'sine', 2200);
       }
 
       currentStep++;
@@ -753,23 +763,23 @@ footer {
 
   musicToggle.addEventListener('click', async () => {
     try {
-      if (!audioContext) {
-        initializeAudio();
-      }
-      await audioContext.resume();
-
       if (playbackTimer !== null) {
         clearInterval(playbackTimer);
         playbackTimer = null;
-        stopDrone();
+        masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.04);
         musicToggle.classList.remove('is-playing');
         musicToggle.setAttribute('aria-label', 'Play romantic music');
         return;
       }
 
+      if (!audioContext) {
+        initializeAudio();
+      }
+      await audioContext.resume();
+      masterGain.gain.cancelScheduledValues(audioContext.currentTime);
+      masterGain.gain.setTargetAtTime(Number(volumeSlider.value), audioContext.currentTime, 0.04);
       currentStep = 0;
-      nextNoteTime = audioContext.currentTime + 0.05;
-      startDrone();
+      nextNoteTime = audioContext.currentTime + 0.08;
       scheduleMusic();
       playbackTimer = setInterval(scheduleMusic, 100);
       musicToggle.classList.add('is-playing');
@@ -781,9 +791,9 @@ footer {
     }
   });
 
-  volumeSlider.addEventListener('input', (event) => {
-    if (masterGain) {
-      masterGain.gain.value = Number(event.target.value);
+  volumeSlider.addEventListener('input', () => {
+    if (masterGain && audioContext && playbackTimer !== null) {
+      masterGain.gain.setTargetAtTime(Number(volumeSlider.value), audioContext.currentTime, 0.025);
     }
   });
 

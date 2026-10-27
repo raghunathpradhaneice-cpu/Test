@@ -44,14 +44,18 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 68px;
-    height: 68px;
+    min-width: 104px;
+    min-height: 48px;
+    gap: 9px;
+    padding: 0 16px;
     border: 0;
-    border-radius: 50%;
+    border-radius: 999px;
     background: linear-gradient(135deg, #fff3f0 0%, #f5c6d1 35%, #d77a8a 100%);
     color: #5f2c33;
     box-shadow: 0 18px 32px rgba(144, 60, 74, 0.25), inset 0 0 16px rgba(255,255,255,0.55);
-    font-size: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .04em;
     line-height: 1;
     cursor: pointer;
     touch-action: manipulation;
@@ -71,31 +75,7 @@ body {
     display: block;
     transform: translateY(-1px);
     animation: heartbeat 1.5s ease-in-out infinite;
-}
-
-.music-panel {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 999px;
-    background: rgba(38, 29, 28, 0.78);
-    box-shadow: 0 16px 30px rgba(18, 12, 13, 0.18);
-    backdrop-filter: blur(8px);
-}
-
-.music-panel label {
-    color: #fffaf5;
-    font-size: 11px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-}
-
-.music-panel input[type="range"] {
-    width: 110px;
-    accent-color: #f4b3bf;
-    cursor: pointer;
+    font-size: 23px;
 }
 
 .floating-hearts {
@@ -676,19 +656,14 @@ footer {
     }
 
     .music-toggle {
-        width: 52px;
-        height: 52px;
-        flex: 0 0 52px;
-        font-size: 24px;
+        min-width: 96px;
+        min-height: 46px;
+        padding: 0 13px;
+        font-size: 14px;
     }
 
-    .music-panel {
-        gap: 7px;
-        padding: 7px 9px;
-    }
-
-    .music-panel input[type="range"] {
-        width: clamp(64px, 22vw, 100px);
+    .music-toggle .heart-icon {
+        font-size: 21px;
     }
 
     .opening {
@@ -759,12 +734,9 @@ footer {
 
 <body>
 <div class="music-widget" aria-label="Music controls">
-    <div class="music-panel">
-        <label for="volume-slider">Volume</label>
-        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.45" aria-label="Music volume">
-    </div>
     <button class="music-toggle" id="music-toggle" type="button" aria-label="Play romantic music">
         <span class="heart-icon" aria-hidden="true">♥</span>
+        <span id="music-toggle-label">Play</span>
     </button>
 </div>
 <div class="floating-hearts" aria-hidden="true">
@@ -873,7 +845,7 @@ footer {
 
 <script>
   const musicToggle = document.getElementById('music-toggle');
-  const volumeSlider = document.getElementById('volume-slider');
+  const musicToggleLabel = document.getElementById('music-toggle-label');
   let audioContext = null;
   let masterGain = null;
   let playbackTimer = null;
@@ -903,7 +875,7 @@ footer {
 
     audioContext = new AudioContextConstructor();
     masterGain = audioContext.createGain();
-    masterGain.gain.value = Number(volumeSlider.value);
+    masterGain.gain.value = 0.35;
     masterGain.connect(audioContext.destination);
   }
 
@@ -975,6 +947,7 @@ footer {
         masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.04);
         musicToggle.classList.remove('is-playing');
         musicToggle.setAttribute('aria-label', 'Play romantic music');
+        musicToggleLabel.textContent = 'Play';
         return;
       }
 
@@ -983,23 +956,19 @@ footer {
       }
       await audioContext.resume();
       masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-      masterGain.gain.setTargetAtTime(Number(volumeSlider.value), audioContext.currentTime, 0.04);
+      masterGain.gain.setTargetAtTime(0.35, audioContext.currentTime, 0.04);
       currentStep = 0;
       nextNoteTime = audioContext.currentTime + 0.08;
       scheduleMusic();
       playbackTimer = setInterval(scheduleMusic, 100);
       musicToggle.classList.add('is-playing');
       musicToggle.setAttribute('aria-label', 'Pause romantic music');
+      musicToggleLabel.textContent = 'Pause';
     } catch (error) {
       musicToggle.classList.remove('is-playing');
       musicToggle.setAttribute('aria-label', 'Play romantic music');
+      musicToggleLabel.textContent = 'Play';
       console.error('Unable to play romantic music:', error);
-    }
-  });
-
-  volumeSlider.addEventListener('input', () => {
-    if (masterGain && audioContext && playbackTimer !== null) {
-      masterGain.gain.setTargetAtTime(Number(volumeSlider.value), audioContext.currentTime, 0.025);
     }
   });
 

@@ -5,79 +5,227 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Thank You for Being in My Life ❤️</title>
+<title>For You, Always</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 
 <style>
 * {
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 24px;
+}
+
 body {
     margin: 0;
-    min-height: 100vh;
+    color: #272321;
+    background: #171615;
+    font-family: "DM Sans", sans-serif;
+}
+
+.opening {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 25px 12px;
-    font-family: Georgia, serif;
-    text-align: center;
-    color: #793b54;
-    background: linear-gradient(
-        135deg, #ffdce8, #fff0e6, #f2dfff
-    );
+    min-height: 660px;
+    height: 88svh;
+    max-height: 1000px;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+    color: #fffaf5;
+    background: #25201d;
 }
 
-.card {
-    max-width: 500px;
+.opening__image,
+.opening::before,
+.opening::after {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    padding: 28px;
-    border-radius: 25px;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 12px 40px #b45b7730;
-    animation: appear 1.2s ease;
+    height: 100%;
 }
 
-h1 {
-    color: #d64e79;
-    line-height: 1.4;
-}
-
-.photo {
-    display: block;
-    width: 100%;
-    max-height: 420px;
+.opening__image {
+    z-index: -2;
     object-fit: cover;
-    border-radius: 18px;
-    border: 3px solid white;
-    box-shadow: 0 5px 20px #b45b7730;
+    object-position: center 42%;
+    filter: saturate(.82) contrast(1.04);
+    animation: image-arrive 2s ease-out both;
 }
 
-p {
+.opening::before {
+    z-index: -1;
+    content: "";
+    background: linear-gradient(90deg, rgba(20, 15, 17, .72), rgba(20, 15, 17, .18) 76%),
+        linear-gradient(0deg, rgba(17, 14, 15, .76), transparent 68%);
+}
+
+.opening::after {
+    z-index: -1;
+    content: "";
+    pointer-events: none;
+    opacity: .14;
+    background-image: repeating-radial-gradient(circle at 20% 30%, #fff 0 .45px, transparent .8px 3px);
+    mix-blend-mode: soft-light;
+}
+
+.opening__top,
+.opening__bottom {
+    position: absolute;
+    right: clamp(24px, 6vw, 84px);
+    left: clamp(24px, 6vw, 84px);
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: rgba(255, 250, 245, .82);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.opening__top {
+    top: 28px;
+}
+
+.opening__bottom {
+    bottom: 24px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 250, 245, .38);
+}
+
+.opening__copy {
+    width: min(850px, 100%);
+    padding: 120px clamp(24px, 9vw, 132px) 100px;
+    animation: rise-in 1s .2s ease both;
+}
+
+.eyebrow,
+.letter__eyebrow {
+    margin: 0 0 22px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.opening h1 {
+    max-width: 760px;
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 82px;
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+.opening h1 em {
+    color: #f0c4bd;
+    font-weight: 400;
+}
+
+.opening__intro {
+    max-width: 450px;
+    margin: 24px 0 30px;
+    color: rgba(255, 250, 245, .9);
     font-size: 18px;
-    line-height: 1.8;
+    line-height: 1.7;
 }
 
-.heart {
-    font-size: 32px;
-    animation: beat 1.2s infinite;
+.read-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid rgba(255, 250, 245, .72);
+    color: #fffaf5;
+    font-size: 14px;
+    text-decoration: none;
+    transition: gap .25s ease, color .25s ease;
 }
 
-.signature {
-    color: #d64e79;
-    font-size: 21px;
+.read-note:hover {
+    gap: 20px;
+    color: #f0c4bd;
+}
+
+.letter {
+    padding: 100px 24px 110px;
+    background: #f3ece7;
+}
+
+.letter__inner {
+    max-width: 720px;
+    margin: 0 auto;
+    animation: rise-in 1s ease both;
+}
+
+.letter__eyebrow {
+    margin-bottom: 28px;
+    color: #8d5d58;
+}
+
+.letter__salutation {
+    margin: 0 0 10px;
+    color: #8d5d58;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
     font-style: italic;
 }
 
-@keyframes beat {
-    50% {
-        transform: scale(1.15);
-    }
+.letter h2 {
+    margin: 0 0 30px;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 54px;
+    font-weight: 400;
+    line-height: 1.15;
 }
 
-@keyframes appear {
+.letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature) {
+    max-width: 650px;
+    margin: 0 0 18px;
+    color: #554b48;
+    font-size: 17px;
+    line-height: 1.9;
+}
+
+.signoff {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    margin-top: 38px;
+    color: #8d5d58;
+    font-size: 13px;
+}
+
+.signature {
+    margin: 0;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 30px;
+    font-style: italic;
+}
+
+.seal {
+    margin-top: 10px;
+    color: #b65f64;
+    font-size: 23px;
+}
+
+footer {
+    padding: 22px 24px;
+    color: #d8c8c0;
+    background: #171615;
+    font-size: 11px;
+    text-align: center;
+}
+
+@keyframes rise-in {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(18px);
     }
     to {
         opacity: 1;
@@ -85,64 +233,119 @@ p {
     }
 }
 
-@media (max-width: 480px) {
-    .card {
-        padding: 22px 17px;
+@keyframes image-arrive {
+    from {
+        transform: scale(1.04);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .opening {
+        min-height: 640px;
+        height: 88svh;
     }
 
-    h1 {
-        font-size: 27px;
+    .opening__image {
+        object-position: 52% center;
     }
 
-    p {
-        font-size: 17px;
+    .opening__top,
+    .opening__bottom {
+        right: 22px;
+        left: 22px;
+        font-size: 9px;
+    }
+
+    .opening__top {
+        top: 22px;
+    }
+
+    .opening__bottom {
+        bottom: 20px;
+    }
+
+    .opening__copy {
+        padding: 100px 25px 100px;
+    }
+
+    .opening h1 {
+        font-size: 55px;
+    }
+
+    .opening__intro {
+        max-width: 340px;
+        font-size: 16px;
+    }
+
+    .letter {
+        padding: 76px 25px 82px;
+    }
+
+    .letter h2 {
+        font-size: 40px;
+    }
+
+    .letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature) {
+        font-size: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
     }
 }
 </style>
 </head>
 
 <body>
-<div class="card">
+<main>
+    <section class="opening" aria-labelledby="opening-title">
+        <img class="opening__image" src="photo.jpg" alt="A portrait surrounded by flowers">
+        <div class="opening__top" aria-hidden="true">
+            <span>FOR YOU, ALWAYS</span>
+            <span>A LITTLE NOTE FROM THE HEART</span>
+        </div>
+        <div class="opening__copy">
+            <p class="eyebrow">Some moments stay with us</p>
+            <h1 id="opening-title">Some people<br>feel like <em>home.</em></h1>
+            <p class="opening__intro">And somehow, you make even ordinary days feel like something worth remembering.</p>
+            <a class="read-note" href="#letter">Read my note <span aria-hidden="true">&darr;</span></a>
+        </div>
+        <div class="opening__bottom" aria-hidden="true">
+            <span>SHOT WITH LOVE</span>
+            <span>A MOMENT I WILL KEEP</span>
+        </div>
+    </section>
 
-    <div class="heart">❤️ 🌷 ❤️</div>
-
-    <h1>Thank You for Being in My Life</h1>
-
-    <!-- Your personalized photo -->
-    <img
-        class="photo"
-        src="photo.jpg"
-        alt="A special person"
-    >
-
-    <p>
-        Some people enter our lives and make everything
-        a little more beautiful. You are one of those people. ❤️
-    </p>
-
-    <p>
-        Thank you for your kindness, your smile, your presence,
-        and all those little moments that mean more than words
-        can ever explain.
-    </p>
-
-    <p>
-        Life feels more special because you are a part of it.
-        I may not say it every day, but I am truly grateful
-        to have you in my life.
-    </p>
-
-    <p>
-        No matter where life takes us, I hope you always
-        remember how special you are to me. 💗
-    </p>
-
-    <div class="heart">💖</div>
-
-    <p class="signature">
-        Forever grateful for you 🌹
-    </p>
-
-</div>
+    <section class="letter" id="letter" aria-labelledby="letter-title">
+        <div class="letter__inner">
+            <p class="letter__eyebrow">To someone extraordinary</p>
+            <p class="letter__salutation">Dear you,</p>
+            <h2 id="letter-title">Thank you for being in my life.</h2>
+            <p>Some people enter our lives and make everything a little more beautiful. You are one of those people.</p>
+            <p>Thank you for your kindness, your smile, your presence, and all those little moments that mean more than words can ever explain.</p>
+            <p>Life feels more special because you are a part of it. I may not say it every day, but I am truly grateful to have you in my life.</p>
+            <p>No matter where life takes us, I hope you always remember how special you are to me.</p>
+            <div class="signoff">
+                <span>With all my heart,</span>
+                <p class="signature">Forever grateful for you</p>
+                <span class="seal" aria-hidden="true">&hearts;</span>
+            </div>
+        </div>
+    </section>
+</main>
+<footer>Made of memories and a little bit of magic</footer>
 </body>
 </html>

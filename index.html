@@ -109,8 +109,7 @@ body {
     background: linear-gradient(180deg, #f3ece7 0%, #f9f1ed 100%);
 }
 
-.note-links[hidden],
-.story-page[hidden] {
+.note-links[hidden] {
     display: none !important;
 }
 
@@ -206,21 +205,20 @@ body {
 }
 
 .note-pagination {
-    position: fixed;
-    z-index: 40;
-    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 28px auto 0;
     padding: 8px 12px;
     border: 1px solid rgba(255, 255, 255, .48);
     border-radius: 999px;
     background: rgba(255, 250, 245, .9);
     box-shadow: 0 12px 32px rgba(39, 35, 33, .18);
     backdrop-filter: blur(12px);
-    transform: translateX(-50%);
 }
 
 .note-pagination__pages {
@@ -419,6 +417,65 @@ body {
     bottom: 24px;
     padding-top: 15px;
     border-top: 1px solid rgba(255, 250, 245, .38);
+}
+
+.opening__scroll-cue {
+    position: absolute;
+    bottom: 64px;
+    left: 50%;
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 18px;
+    border: 1px solid rgba(255, 250, 245, .78);
+    border-radius: 999px;
+    color: #fffaf5;
+    background: rgba(52, 35, 36, .72);
+    box-shadow: 0 0 0 5px rgba(255, 231, 225, .12), 0 8px 26px rgba(20, 12, 14, .3), inset 0 0 16px rgba(255, 230, 225, .12);
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transform: translateX(-50%);
+    transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.opening__scroll-cue:hover {
+    background: rgba(105, 57, 65, .9);
+    box-shadow: 0 0 0 7px rgba(255, 231, 225, .17), 0 12px 30px rgba(20, 12, 14, .36), inset 0 0 18px rgba(255, 230, 225, .2);
+    transform: translate(-50%, -2px);
+}
+
+.opening__scroll-cue:focus-visible {
+    outline: 3px solid #ffe0d8;
+    outline-offset: 4px;
+}
+
+.opening__scroll-cue span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.opening__scroll-cue svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+    animation: scroll-cue-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-bounce {
+    0%, 100% {
+        transform: translateY(-2px);
+    }
+    50% {
+        transform: translateY(3px);
+    }
 }
 
 .opening__copy {
@@ -622,7 +679,6 @@ footer {
 
     .note-pagination {
         gap: 6px;
-        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
         padding: 6px 9px;
     }
 
@@ -748,7 +804,7 @@ footer {
     <span>♡</span>
 </div>
 <main>
-    <section class="opening story-page" data-story-page aria-labelledby="opening-title">
+    <section class="opening" aria-labelledby="opening-title">
         <img class="opening__image" src="photo.jpg" alt="A portrait surrounded by flowers">
         <div class="opening__top" aria-hidden="true">
             <span>FOR YOU, ALWAYS</span>
@@ -759,13 +815,17 @@ footer {
             <h1 id="opening-title">Some people<br>feel like <em>home</em><span class="emoji-burst">♥</span></h1>
             <p class="opening__intro">And somehow, you make even ordinary days feel like something worth remembering ✨💫</p>
         </div>
+        <a class="opening__scroll-cue" href="#letter">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            <span>Scroll to discover</span>
+        </a>
         <div class="opening__bottom" aria-hidden="true">
             <span>SHOT WITH LOVE</span>
             <span>A MOMENT I WILL KEEP</span>
         </div>
     </section>
 
-    <section class="letter story-page" id="letter" data-story-page aria-labelledby="letter-title">
+    <section class="letter" id="letter" aria-labelledby="letter-title">
         <div class="letter__inner">
             <p class="letter__eyebrow">💌 To someone extraordinary</p>
             <p class="letter__salutation">Dear you,</p>
@@ -782,7 +842,7 @@ footer {
         </div>
     </section>
 
-    <section class="note-links story-page" id="notes-section" data-story-page aria-labelledby="notes-title" hidden>
+    <section class="note-links" id="notes-section" aria-labelledby="notes-title">
         <div class="note-links__inner">
             <h2 class="note-links__heading" id="notes-title">💌 A few little notes for you</h2>
             <div class="note-links__grid">
@@ -792,7 +852,7 @@ footer {
                         <h3>That day</h3>
                         <p>I met you and I liked you as a person before I even knew how much you would mean to me.</p>
                     </div>
-                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. I cannot promise the world to you, but I promise I will fight with the world for you. ✨">Open note →</a>
+                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. I cannot promise the world to you, but I promise I will fight with the world for you. ✨">Read my note →</a>
                 </article>
 
                 <article class="note-card">
@@ -801,7 +861,7 @@ footer {
                         <h3>Always</h3>
                         <p>I want to be the person who stays, supports you, and keeps showing up for you.</p>
                     </div>
-                    <a href="#" data-message="I promise I will be there for you. In your happy moments, your tired days, your fears, and your dreams, I will be there. I am not just saying it — I mean it with my whole heart. ❤️">Open note →</a>
+                    <a href="#" data-message="I promise I will be there for you. In your happy moments, your tired days, your fears, and your dreams, I will be there. I am not just saying it — I mean it with my whole heart. ❤️">Read my note →</a>
                 </article>
 
                 <article class="note-card">
@@ -810,7 +870,7 @@ footer {
                         <h3>Forever</h3>
                         <p>I can already imagine the life we could build together — soft, happy, and full of love.</p>
                     </div>
-                    <a href="#" data-message="I can already picture us laughing in the little moments, building a life full of peace, love, and a forever kind of happiness. I believe we are meant to be, and I am ready to choose you every day. 💫">Open note →</a>
+                    <a href="#" data-message="I can already picture us laughing in the little moments, building a life full of peace, love, and a forever kind of happiness. I believe we are meant to be, and I am ready to choose you every day. 💫">Read my note →</a>
                 </article>
 
                 <article class="note-card">
@@ -819,9 +879,19 @@ footer {
                         <h3>Chaos</h3>
                         <p>In case I forget to be romantic, here is your reminder that I still think you are my favorite person.</p>
                     </div>
-                    <a href="#" data-message="You are the only person who can make my heart do cartwheels and my brain forget basic logic. I am not saying I am obsessed, but I would absolutely choose your smile over a perfect schedule. 😄">Open silly note →</a>
+                    <a href="#" data-message="You are the only person who can make my heart do cartwheels and my brain forget basic logic. I am not saying I am obsessed, but I would absolutely choose your smile over a perfect schedule. 😄">Read my note →</a>
                 </article>
             </div>
+            <nav class="note-pagination" aria-label="Notes pagination">
+                <button class="note-pagination__button" id="notes-previous" type="button" aria-label="Previous notes page">
+                    <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="note-pagination__pages" id="notes-pages"></div>
+                <button class="note-pagination__button" id="notes-next" type="button" aria-label="Next notes page">
+                    <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+                <span class="note-pagination__status" id="notes-page-status" aria-live="polite"></span>
+            </nav>
             <section class="note-view" id="note-view" aria-labelledby="note-view-title" aria-live="polite" hidden>
                 <p class="note-view__tag" id="note-view-tag"></p>
                 <h3 id="note-view-title" tabindex="-1"></h3>
@@ -830,16 +900,6 @@ footer {
             </section>
         </div>
     </section>
-    <nav class="note-pagination" aria-label="Story pages">
-        <button class="note-pagination__button" id="notes-previous" type="button" aria-label="Previous page">
-            <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
-        </button>
-        <div class="note-pagination__pages" id="notes-pages"></div>
-        <button class="note-pagination__button" id="notes-next" type="button" aria-label="Next page">
-            <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
-        </button>
-        <span class="note-pagination__status" id="notes-page-status" aria-live="polite"></span>
-    </nav>
 </main>
 <footer>Made of memories, laughter, and a little bit of magic</footer>
 
@@ -972,7 +1032,7 @@ footer {
     }
   });
 
-  const storyPages = Array.from(document.querySelectorAll('[data-story-page]'));
+  const noteCards = Array.from(document.querySelectorAll('.note-card'));
   const noteLinks = document.querySelectorAll('[data-message]');
   const noteView = document.getElementById('note-view');
   const noteViewTag = document.getElementById('note-view-tag');
@@ -983,51 +1043,46 @@ footer {
   const notesPrevious = document.getElementById('notes-previous');
   const notesNext = document.getElementById('notes-next');
   const notesPageStatus = document.getElementById('notes-page-status');
-  const totalStoryPages = storyPages.length;
-  let currentStoryPage = 0;
+  const notesPerPage = 2;
+  const totalNotesPages = Math.ceil(noteCards.length / notesPerPage);
+  let currentNotesPage = 0;
   let activeNoteLink = null;
 
-  function showStoryPage(page, shouldScroll = false) {
-    currentStoryPage = Math.max(0, Math.min(page, totalStoryPages - 1));
+  function showNotesPage(page, shouldScroll = false) {
+    currentNotesPage = Math.max(0, Math.min(page, totalNotesPages - 1));
     noteView.hidden = true;
     activeNoteLink = null;
 
-    storyPages.forEach((storyPage, index) => {
-      storyPage.hidden = index !== currentStoryPage;
+    noteCards.forEach((card, index) => {
+      card.hidden = Math.floor(index / notesPerPage) !== currentNotesPage;
     });
 
     notesPages.replaceChildren();
-    for (let pageIndex = 0; pageIndex < totalStoryPages; pageIndex++) {
+    for (let pageIndex = 0; pageIndex < totalNotesPages; pageIndex++) {
       const pageButton = document.createElement('button');
       pageButton.className = 'note-pagination__button';
       pageButton.type = 'button';
       pageButton.textContent = String(pageIndex + 1);
-      const pageHeading = storyPages[pageIndex].querySelector('h1, h2, h3');
-      const pageTitle = storyPages[pageIndex].dataset.pageTitle
-        || (pageIndex === 0 ? 'Photo' : pageHeading.textContent.trim());
-      pageButton.setAttribute('aria-label', `Page ${pageIndex + 1}: ${pageTitle}`);
-      if (pageIndex === currentStoryPage) {
+      pageButton.setAttribute('aria-label', `Notes page ${pageIndex + 1}`);
+      if (pageIndex === currentNotesPage) {
         pageButton.setAttribute('aria-current', 'page');
       }
-      pageButton.addEventListener('click', () => showStoryPage(pageIndex, true));
+      pageButton.addEventListener('click', () => showNotesPage(pageIndex, true));
       notesPages.append(pageButton);
     }
 
-    notesPrevious.disabled = currentStoryPage === 0;
-    notesNext.disabled = currentStoryPage === totalStoryPages - 1;
-    const currentHeading = storyPages[currentStoryPage].querySelector('h1, h2, h3');
-    const currentTitle = storyPages[currentStoryPage].dataset.pageTitle
-      || (currentStoryPage === 0 ? 'Photo' : currentHeading.textContent.trim());
-    notesPageStatus.textContent = `Page ${currentStoryPage + 1} of ${totalStoryPages}: ${currentTitle}`;
+    notesPrevious.disabled = currentNotesPage === 0;
+    notesNext.disabled = currentNotesPage === totalNotesPages - 1;
+    notesPageStatus.textContent = `Notes page ${currentNotesPage + 1} of ${totalNotesPages}`;
 
     if (shouldScroll) {
-      storyPages[currentStoryPage].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('notes-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
-  notesPrevious.addEventListener('click', () => showStoryPage(currentStoryPage - 1, true));
-  notesNext.addEventListener('click', () => showStoryPage(currentStoryPage + 1, true));
-  showStoryPage(0);
+  notesPrevious.addEventListener('click', () => showNotesPage(currentNotesPage - 1, true));
+  notesNext.addEventListener('click', () => showNotesPage(currentNotesPage + 1, true));
+  showNotesPage(0);
 
   noteLinks.forEach((link) => {
     link.addEventListener('click', function (event) {

@@ -58,6 +58,7 @@ body {
     letter-spacing: .04em;
     line-height: 1;
     cursor: pointer;
+    text-decoration: none;
     touch-action: manipulation;
     transition: transform .25s ease, box-shadow .25s ease;
 }
@@ -71,11 +72,27 @@ body {
     box-shadow: 0 0 0 6px rgba(255, 190, 205, 0.22), 0 16px 30px rgba(144, 60, 74, 0.25);
 }
 
-.music-toggle .heart-icon {
+.music-toggle:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+}
+
+.music-toggle svg {
     display: block;
-    transform: translateY(-1px);
-    animation: heartbeat 1.5s ease-in-out infinite;
-    font-size: 23px;
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.music-toggle__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.music-toggle-label {
+    min-width: 34px;
+    font-size: 14px;
 }
 
 .floating-hearts {
@@ -714,12 +731,9 @@ footer {
     .music-toggle {
         min-width: 96px;
         min-height: 46px;
+        gap: 8px;
         padding: 0 13px;
         font-size: 14px;
-    }
-
-    .music-toggle .heart-icon {
-        font-size: 21px;
     }
 
     .opening {
@@ -791,8 +805,10 @@ footer {
 <body>
 <div class="music-widget" aria-label="Music controls">
     <button class="music-toggle" id="music-toggle" type="button" aria-label="Play romantic music">
-        <span class="heart-icon" aria-hidden="true">♥</span>
-        <span id="music-toggle-label">Play</span>
+        <span class="music-toggle__content">
+            <svg id="music-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+            <span class="music-toggle-label" id="music-toggle-label">Play</span>
+        </span>
     </button>
 </div>
 <div class="floating-hearts" aria-hidden="true">
@@ -905,6 +921,7 @@ footer {
 
 <script>
   const musicToggle = document.getElementById('music-toggle');
+  const musicToggleIcon = document.getElementById('music-toggle-icon');
   const musicToggleLabel = document.getElementById('music-toggle-label');
   let audioContext = null;
   let masterGain = null;
@@ -912,20 +929,24 @@ footer {
   let currentStep = 0;
   let nextNoteTime = 0;
 
+  const tempo = 74;
+  const stepDuration = 60 / tempo / 2;
   const melody = [
-    329.63, 369.99, 415.30, 440, 0, 415.30, 369.99, 329.63,
-    277.18, 329.63, 369.99, 0, 329.63, 277.18, 246.94, 0,
-    220, 277.18, 329.63, 369.99, 0, 329.63, 277.18, 246.94,
-    277.18, 329.63, 369.99, 415.30, 440, 0, 415.30, 369.99
+    64, 67, 69, 67, 64, 62, 60, null,
+    62, 67, 71, 69, 67, 62, 64, null,
+    60, 64, 69, 67, 64, 60, 62, null,
+    57, 60, 65, 64, 60, 57, 55, null
   ];
   const chords = [
-    [220, 277.18, 329.63, 415.30],
-    [185, 220, 277.18, 369.99],
-    [146.83, 185, 220, 277.18],
-    [164.81, 207.65, 246.94, 329.63]
+    { notes: [48, 52, 55, 59], bass: 36 },
+    { notes: [43, 50, 55, 59], bass: 43 },
+    { notes: [45, 48, 52, 55], bass: 45 },
+    { notes: [41, 45, 48, 52], bass: 41 }
   ];
-  const bassNotes = [110, 92.5, 73.42, 82.41];
-  const stepDuration = 0.62;
+
+  function frequencyForMidi(note) {
+    return 440 * Math.pow(2, (note - 69) / 12);
+  }
 
   function initializeAudio() {
     const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
@@ -935,99 +956,137 @@ footer {
 
     audioContext = new AudioContextConstructor();
     masterGain = audioContext.createGain();
-    masterGain.gain.value = 0.35;
-    masterGain.connect(audioContext.destination);
+    masterGain.gain.value = 0;
+
+    const reverb = audioContext.createConvolver();
+    const reverbLength = Math.floor(audioContext.sampleRate * 2.4);
+    const impulse = audioContext.createBuffer(2, reverbLength, audioContext.sampleRate);
+    for (let channel = 0; channel < impulse.numberOfChannels; channel++) {
+      const samples = impulse.getChannelData(channel);
+      for (let index = 0; index < samples.length; index++) {
+        samples[index] = (Math.random() * 2 - 1) * Math.pow(1 - index / samples.length, 3);
+      }
+    }
+    reverb.buffer = impulse;
+
+    const dryGain = audioContext.createGain();
+    const wetGain = audioContext.createGain();
+    dryGain.gain.value = 0.76;
+    wetGain.gain.value = 0.3;
+    masterGain.connect(dryGain);
+    masterGain.connect(reverb);
+    dryGain.connect(audioContext.destination);
+    reverb.connect(wetGain);
+    wetGain.connect(audioContext.destination);
   }
 
-  function playNote(frequency, startTime, duration, volume, waveform, filterFrequency) {
-    const oscillator = audioContext.createOscillator();
+  function playPianoNote(note, startTime, duration, volume) {
+    if (note === null) {
+      return;
+    }
+
+    const fundamental = frequencyForMidi(note);
     const noteGain = audioContext.createGain();
     const filter = audioContext.createBiquadFilter();
-
-    oscillator.type = waveform;
-    oscillator.frequency.setValueAtTime(frequency, startTime);
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(filterFrequency, startTime);
+    filter.frequency.setValueAtTime(2400, startTime);
     noteGain.gain.setValueAtTime(0.0001, startTime);
-    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.04);
+    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.025);
     noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-    oscillator.connect(filter);
     filter.connect(noteGain);
     noteGain.connect(masterGain);
-    oscillator.start(startTime);
-    oscillator.stop(startTime + duration + 0.03);
+
+    const body = audioContext.createOscillator();
+    body.type = 'triangle';
+    body.frequency.setValueAtTime(fundamental, startTime);
+    body.connect(filter);
+    body.start(startTime);
+    body.stop(startTime + duration + 0.04);
+
+    const shimmer = audioContext.createOscillator();
+    const shimmerGain = audioContext.createGain();
+    shimmer.type = 'sine';
+    shimmer.frequency.setValueAtTime(fundamental * 2, startTime);
+    shimmerGain.gain.value = 0.22;
+    shimmer.connect(shimmerGain);
+    shimmerGain.connect(filter);
+    shimmer.start(startTime);
+    shimmer.stop(startTime + duration + 0.04);
   }
 
   function playPad(chord, startTime) {
-    chord.forEach((frequency) => {
+    chord.notes.forEach((note) => {
       const oscillator = audioContext.createOscillator();
-      const padGain = audioContext.createGain();
+      const envelope = audioContext.createGain();
       oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(frequency / 2, startTime);
-      padGain.gain.setValueAtTime(0.0001, startTime);
-      padGain.gain.linearRampToValueAtTime(0.018, startTime + 0.55);
-      padGain.gain.setTargetAtTime(0.0001, startTime + stepDuration * 3.5, 0.35);
-      oscillator.connect(padGain);
-      padGain.connect(masterGain);
+      oscillator.frequency.setValueAtTime(frequencyForMidi(note), startTime);
+      envelope.gain.setValueAtTime(0.0001, startTime);
+      envelope.gain.linearRampToValueAtTime(0.014, startTime + 0.35);
+      envelope.gain.setTargetAtTime(0.0001, startTime + stepDuration * 7.5, 0.45);
+      oscillator.connect(envelope);
+      envelope.connect(masterGain);
       oscillator.start(startTime);
-      oscillator.stop(startTime + stepDuration * 4 + 0.2);
+      oscillator.stop(startTime + stepDuration * 8 + 0.5);
     });
+
+    playPianoNote(chord.bass, startTime, stepDuration * 3.5, 0.075);
+    playPianoNote(chord.bass + 12, startTime + stepDuration * 4, stepDuration * 2.5, 0.04);
   }
 
   function scheduleMusic() {
     while (nextNoteTime < audioContext.currentTime + 0.2) {
       const step = currentStep % melody.length;
-      const chordIndex = Math.floor(step / 4) % chords.length;
+      const chord = chords[Math.floor(step / 8) % chords.length];
 
-      if (step % 4 === 0) {
-        playPad(chords[chordIndex], nextNoteTime);
-        playNote(bassNotes[chordIndex], nextNoteTime, stepDuration * 2.8, 0.055, 'sine', 420);
+      if (step % 8 === 0) {
+        playPad(chord, nextNoteTime);
       }
-
-      if (melody[step] > 0) {
-        playNote(melody[step], nextNoteTime, stepDuration * 1.12, 0.085, 'triangle', 1850);
+      if (step % 2 === 0) {
+        const arpeggioNote = chord.notes[(step / 2) % chord.notes.length] + 12;
+        playPianoNote(arpeggioNote, nextNoteTime, stepDuration * 1.65, 0.025);
       }
-
-      if (step % 2 === 1) {
-        const arpeggioNote = chords[chordIndex][Math.floor(step / 2) % 4];
-        playNote(arpeggioNote * 2, nextNoteTime + 0.16, stepDuration * 0.55, 0.022, 'sine', 2200);
-      }
+      playPianoNote(melody[step], nextNoteTime, stepDuration * 1.8, 0.09);
 
       currentStep++;
       nextNoteTime += stepDuration;
     }
   }
 
+  function updateMusicToggle(isPlaying) {
+    musicToggle.classList.toggle('is-playing', isPlaying);
+    musicToggle.setAttribute('aria-label', `${isPlaying ? 'Pause' : 'Play'} romantic music`);
+    musicToggleLabel.textContent = isPlaying ? 'Pause' : 'Play';
+    musicToggleIcon.innerHTML = isPlaying
+      ? '<path d="M7 5h4v14H7zm6 0h4v14h-4z"></path>'
+      : '<path d="M8 5v14l11-7z"></path>';
+  }
+
   musicToggle.addEventListener('click', async () => {
     try {
-      if (playbackTimer !== null) {
-        clearInterval(playbackTimer);
-        playbackTimer = null;
-        masterGain.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.04);
-        musicToggle.classList.remove('is-playing');
-        musicToggle.setAttribute('aria-label', 'Play romantic music');
-        musicToggleLabel.textContent = 'Play';
-        return;
-      }
-
       if (!audioContext) {
         initializeAudio();
       }
+
+      if (playbackTimer !== null) {
+        clearInterval(playbackTimer);
+        playbackTimer = null;
+        masterGain.gain.cancelScheduledValues(audioContext.currentTime);
+        masterGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.08);
+        updateMusicToggle(false);
+        return;
+      }
+
       await audioContext.resume();
       masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-      masterGain.gain.setTargetAtTime(0.35, audioContext.currentTime, 0.04);
+      masterGain.gain.setValueAtTime(masterGain.gain.value, audioContext.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.55, audioContext.currentTime + 0.3);
       currentStep = 0;
       nextNoteTime = audioContext.currentTime + 0.08;
       scheduleMusic();
       playbackTimer = setInterval(scheduleMusic, 100);
-      musicToggle.classList.add('is-playing');
-      musicToggle.setAttribute('aria-label', 'Pause romantic music');
-      musicToggleLabel.textContent = 'Pause';
+      updateMusicToggle(true);
     } catch (error) {
-      musicToggle.classList.remove('is-playing');
-      musicToggle.setAttribute('aria-label', 'Play romantic music');
-      musicToggleLabel.textContent = 'Play';
+      updateMusicToggle(false);
       console.error('Unable to play romantic music:', error);
     }
   });

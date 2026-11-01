@@ -130,6 +130,123 @@ body {
     display: none !important;
 }
 
+.memory-gallery {
+    padding: 56px 24px 48px;
+    background: #f3ece7;
+}
+
+.memory-gallery__inner {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.memory-gallery__heading {
+    margin: 0 0 24px;
+    color: #392b2b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 400;
+    text-align: center;
+}
+
+.memory-slideshow {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    max-height: 600px;
+    border: 1px solid rgba(141, 93, 88, .18);
+    border-radius: 28px;
+    background: #e8d9d4;
+    box-shadow: 0 20px 50px rgba(80, 52, 48, .16);
+}
+
+.memory-slideshow__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity .65s ease;
+}
+
+.memory-slideshow__image.is-active {
+    opacity: 1;
+}
+
+.memory-slideshow__image:nth-child(2) {
+    object-position: center 10%;
+}
+
+.memory-slideshow__image:nth-child(3) {
+    object-position: center 32%;
+}
+
+.memory-slideshow__controls {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.memory-slideshow__button,
+.memory-slideshow__dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(141, 93, 88, .3);
+    color: #75444a;
+    background: rgba(255, 255, 255, .72);
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.memory-slideshow__button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font: inherit;
+}
+
+.memory-slideshow__button svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.memory-slideshow__button:hover,
+.memory-slideshow__dot:hover {
+    background: #fff;
+}
+
+.memory-slideshow__dots {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.memory-slideshow__dot {
+    width: 11px;
+    height: 11px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.memory-slideshow__dot[aria-current="true"] {
+    border-color: #b65f64;
+    background: #b65f64;
+}
+
+.memory-slideshow__button:focus-visible,
+.memory-slideshow__dot:focus-visible {
+    outline: 3px solid #b65f64;
+    outline-offset: 3px;
+}
+
 .note-links__inner {
     max-width: 980px;
     margin: 0 auto;
@@ -677,6 +794,19 @@ footer {
         padding: 36px 18px 78px;
     }
 
+    .memory-gallery {
+        padding: 40px 18px 36px;
+    }
+
+    .memory-slideshow {
+        aspect-ratio: 4 / 3;
+        border-radius: 22px;
+    }
+
+    .memory-slideshow__controls {
+        gap: 8px;
+    }
+
     .note-links__grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 14px;
@@ -857,6 +987,29 @@ footer {
                 <span>With all my heart 💕</span>
                 <p class="signature">Your forever person</p>
                 <span class="seal" aria-hidden="true">♥♥♥</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="memory-gallery" aria-labelledby="memory-gallery-title">
+        <div class="memory-gallery__inner">
+            <h2 class="memory-gallery__heading" id="memory-gallery-title">A few moments, just for you</h2>
+            <div class="memory-slideshow" id="memory-slideshow" role="region" aria-roledescription="carousel" aria-label="Photo slideshow">
+                <img class="memory-slideshow__image is-active" src="photo.jpg" alt="Photo 1 of 3" aria-hidden="false">
+                <img class="memory-slideshow__image" src="photo1.jpg" alt="Photo 2 of 3" aria-hidden="true">
+                <img class="memory-slideshow__image" src="photo2.jpg" alt="Photo 3 of 3" aria-hidden="true">
+            </div>
+            <div class="memory-slideshow__controls" role="group" aria-label="Slideshow controls">
+                <button class="memory-slideshow__button" id="memory-previous" type="button" aria-label="Previous photo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <div class="memory-slideshow__dots" id="memory-dots" aria-label="Choose a photo"></div>
+                <button class="memory-slideshow__button" id="memory-next" type="button" aria-label="Next photo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+                <button class="memory-slideshow__button" id="memory-toggle" type="button" aria-label="Pause slideshow">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path id="memory-toggle-icon" d="M8 5h3v14H8zM15 5h3v14h-3z"></path></svg>
+                </button>
             </div>
         </div>
     </section>
@@ -1093,6 +1246,76 @@ footer {
       console.error('Unable to play romantic music:', error);
     }
   });
+
+  const memorySlides = Array.from(document.querySelectorAll('.memory-slideshow__image'));
+  const memoryDots = document.getElementById('memory-dots');
+  const memoryPrevious = document.getElementById('memory-previous');
+  const memoryNext = document.getElementById('memory-next');
+  const memoryToggle = document.getElementById('memory-toggle');
+  const memoryToggleIcon = document.getElementById('memory-toggle-icon');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let currentMemorySlide = 0;
+  let memorySlideshowTimer = null;
+  let memorySlideshowPaused = prefersReducedMotion.matches;
+
+  function updateMemoryToggle() {
+    memoryToggle.setAttribute('aria-label', `${memorySlideshowPaused ? 'Play' : 'Pause'} slideshow`);
+    memoryToggleIcon.setAttribute('d', memorySlideshowPaused ? 'M8 5v14l11-7z' : 'M8 5h3v14H8zM15 5h3v14h-3z');
+  }
+
+  function showMemorySlide(index) {
+    currentMemorySlide = (index + memorySlides.length) % memorySlides.length;
+    memorySlides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === currentMemorySlide;
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', String(!isActive));
+      memoryDots.children[slideIndex].setAttribute('aria-current', String(isActive));
+    });
+  }
+
+  function stopMemorySlideshow() {
+    if (memorySlideshowTimer !== null) {
+      clearInterval(memorySlideshowTimer);
+      memorySlideshowTimer = null;
+    }
+  }
+
+  function startMemorySlideshow() {
+    stopMemorySlideshow();
+    if (!memorySlideshowPaused && !document.hidden) {
+      memorySlideshowTimer = setInterval(() => {
+        showMemorySlide(currentMemorySlide + 1);
+      }, 5000);
+    }
+  }
+
+  memorySlides.forEach((slide, index) => {
+    const dot = document.createElement('button');
+    dot.className = 'memory-slideshow__dot';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Show photo ${index + 1}`);
+    dot.setAttribute('aria-current', String(index === currentMemorySlide));
+    dot.addEventListener('click', () => showMemorySlide(index));
+    memoryDots.append(dot);
+  });
+
+  memoryPrevious.addEventListener('click', () => showMemorySlide(currentMemorySlide - 1));
+  memoryNext.addEventListener('click', () => showMemorySlide(currentMemorySlide + 1));
+  memoryToggle.addEventListener('click', () => {
+    memorySlideshowPaused = !memorySlideshowPaused;
+    updateMemoryToggle();
+    startMemorySlideshow();
+  });
+  document.addEventListener('visibilitychange', startMemorySlideshow);
+  prefersReducedMotion.addEventListener('change', () => {
+    if (prefersReducedMotion.matches) {
+      memorySlideshowPaused = true;
+    }
+    updateMemoryToggle();
+    startMemorySlideshow();
+  });
+  updateMemoryToggle();
+  startMemorySlideshow();
 
   const noteCards = Array.from(document.querySelectorAll('.note-card'));
   const noteLinks = document.querySelectorAll('[data-message]');

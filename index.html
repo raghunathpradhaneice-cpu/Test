@@ -122,7 +122,7 @@ body {
 .note-links {
     position: relative;
     z-index: 1;
-    padding: 90px 24px 120px;
+    padding: 40px 24px 120px;
     background: linear-gradient(180deg, #f3ece7 0%, #f9f1ed 100%);
 }
 
@@ -390,6 +390,10 @@ body {
 
 .opening__image {
     z-index: -2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     object-fit: cover;
     object-position: center 42%;
     filter: saturate(.82) contrast(1.04);
@@ -540,7 +544,7 @@ body {
 }
 
 .letter {
-    padding: 100px 24px 110px;
+    padding: 100px 24px 48px;
     background: #f3ece7;
 }
 
@@ -583,7 +587,7 @@ body {
 .signoff {
     display: grid;
     justify-items: start;
-    gap: 8px;
+    gap: 4px;
     margin-top: 38px;
     color: #8d5d58;
     font-size: 13px;
@@ -598,7 +602,7 @@ body {
 }
 
 .seal {
-    margin-top: 10px;
+    margin-top: 0;
     color: #b65f64;
     font-size: 23px;
 }
@@ -670,7 +674,7 @@ footer {
 
 @media (max-width: 600px) {
     .note-links {
-        padding: 64px 18px 78px;
+        padding: 36px 18px 78px;
     }
 
     .note-links__grid {
@@ -774,7 +778,7 @@ footer {
     }
 
     .letter {
-        padding: 76px 25px 82px;
+        padding: 76px 25px 40px;
     }
 
     .letter h2 {
@@ -836,8 +840,8 @@ footer {
             <span>Scroll to discover</span>
         </a>
         <div class="opening__bottom" aria-hidden="true">
-            <span>SHOT WITH LOVE</span>
-            <span>A MOMENT I WILL KEEP</span>
+            <span>MADE WITH YOU IN MIND</span>
+            <span>A LITTLE MOMENT, A LOT OF MEANING</span>
         </div>
     </section>
 
@@ -846,10 +850,9 @@ footer {
             <p class="letter__eyebrow">💌 To someone extraordinary</p>
             <p class="letter__salutation">Dear you,</p>
             <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
-            <p>We did not talk much, but I felt something good and beautiful about you from the very beginning — the way you carry yourself, the calm in your presence, and the kind of energy you bring into a room. I had heard a lot of things about you before meeting you, and all of them turned out to be true.</p>
-            <p>There is something about you that feels different, something that makes me feel at ease and deeply connected. I can't promise you the whole world, but I promise I will fight with the world for you, because you are someone worth standing up for and choosing every day.</p>
-            <p>And if I am honest, there is a place in my heart that already feels like home when I think of us. I can see us building a life together, and I believe with all my heart that one day, we are going to get married. I want to be there for you in every season of life — in your joys, your worries, your dreams, and the quiet moments in between.</p>
-            <p>I promise I will be there for you, through the good days and the hard ones, with love, patience, and my whole heart. You deserve someone who stays, someone who chooses you every day, and I want to be that person.</p>
+            <p>We may not have talked much, but from the very beginning, there was something about you that felt special. Your presence, your calmness, and your energy made me feel something beautiful that I can't quite explain.</p>
+            <p>I can't promise you the whole world, but I promise to stand by you through every high and low, to choose you every day, and to never stop making you feel valued.</p>
+            <p>And honestly, when I think about us, I see something beautiful — a future, a home, and a lifetime together. I don't know what tomorrow holds, but I know I'd love for it to be with you. ❤️</p>
             <div class="signoff">
                 <span>With all my heart 💕</span>
                 <p class="signature">Your forever person</p>
@@ -892,10 +895,10 @@ footer {
                 <article class="note-card">
                     <span class="note-card__tag">😂 Funny</span>
                     <div>
-                        <h3>Chaos</h3>
-                        <p>In case I forget to be romantic, here is your reminder that I still think you are my favorite person.</p>
+                        <h3>A little laugh</h3>
+                        <p>We may still be getting to know each other, but I hope this note brings a smile to your day.</p>
                     </div>
-                    <a href="#" data-message="You are the only person who can make my heart do cartwheels and my brain forget basic logic. I am not saying I am obsessed, but I would absolutely choose your smile over a perfect schedule. 😄">Read my note →</a>
+                    <a href="#" data-message="We may still be getting to know each other, so here's a small, cheerful reminder to take a break and smile. I hope it makes your day a little brighter. 😄">Read my note →</a>
                 </article>
             </div>
             <nav class="note-pagination" aria-label="Notes pagination">

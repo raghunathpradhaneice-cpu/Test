@@ -135,12 +135,23 @@ body {
     margin: 0 auto;
 }
 
+.note-links__eyebrow {
+    margin: 0 0 10px;
+    color: #8d5d58;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .note-links__heading {
-    margin: 0 0 24px;
+    margin: 0 0 30px;
     color: #392b2b;
     font-family: "Playfair Display", Georgia, serif;
-    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
     font-weight: 400;
+    line-height: 1.15;
     text-align: center;
 }
 
@@ -148,7 +159,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
-    margin: 32px auto 0;
+    margin: 0 auto;
     max-width: 980px;
 }
 
@@ -704,37 +715,6 @@ body {
     text-align: center;
 }
 
-.promise-card__number {
-    position: relative;
-    display: grid;
-    width: 46px;
-    height: 46px;
-    place-items: center;
-    margin-bottom: 19px;
-    border: 1px solid rgba(255, 250, 245, .65);
-    border-radius: 50%;
-    color: #493336;
-    background: linear-gradient(145deg, #ffe9df, #eab5b5);
-    box-shadow: 0 0 0 5px rgba(240, 196, 189, .12), 0 7px 18px rgba(20, 12, 14, .2);
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: 17px;
-    font-weight: 500;
-    transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.promise-card__number::after {
-    position: absolute;
-    inset: -8px;
-    border: 1px solid rgba(240, 196, 189, .26);
-    border-radius: 50%;
-    content: "";
-}
-
-.promise-card:hover .promise-card__number {
-    transform: rotate(-8deg) scale(1.06);
-    box-shadow: 0 0 0 6px rgba(240, 196, 189, .16), 0 9px 22px rgba(20, 12, 14, .25);
-}
-
 .promise-card h3 {
     margin: 0 0 10px;
     color: #fffaf5;
@@ -866,10 +846,13 @@ footer {
         padding: 36px 18px 78px;
     }
 
+    .note-links__heading {
+        margin-bottom: 24px;
+    }
+
     .note-links__grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 14px;
-        margin-top: 24px;
     }
 
     .note-card {
@@ -1054,22 +1037,18 @@ footer {
             <h2 class="promises__heading" id="promises-title">Promises I want to keep</h2>
             <div class="promises__grid" id="promises-slides">
                 <article class="promise-card" aria-roledescription="slide">
-                    <span class="promise-card__number">01</span>
                     <h3>I will really listen</h3>
                     <p>I promise to make room for your thoughts and feelings—not just hear your words, but try to understand what matters to you.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
-                    <span class="promise-card__number">02</span>
                     <h3>I will show up</h3>
                     <p>On ordinary days and difficult ones, I promise to be present, steady, and someone you can count on.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
-                    <span class="promise-card__number">03</span>
                     <h3>I will choose kindness</h3>
                     <p>Even when we disagree, I promise to speak with care, be honest, and meet you with respect.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
-                    <span class="promise-card__number">04</span>
                     <h3>I will keep choosing us</h3>
                     <p>I promise to keep learning, growing, and making time for the little moments that make a life feel like ours.</p>
                 </article>
@@ -1091,7 +1070,8 @@ footer {
 
     <section class="note-links" id="notes-section" aria-labelledby="notes-title">
         <div class="note-links__inner">
-            <h2 class="note-links__heading" id="notes-title">💌 A few little notes for you</h2>
+            <p class="note-links__eyebrow">A few words from my heart</p>
+            <h2 class="note-links__heading" id="notes-title">Little notes, just for you</h2>
             <div class="note-links__grid">
                 <article class="note-card">
                     <span class="note-card__tag">💞 First meeting</span>

@@ -240,7 +240,7 @@ body {
     gap: 10px;
     width: fit-content;
     max-width: 100%;
-    margin: 28px auto 0;
+    margin: 16px auto 0;
     padding: 8px 12px;
     border: 1px solid rgba(255, 255, 255, .48);
     border-radius: 999px;
@@ -599,11 +599,9 @@ body {
     position: relative;
     z-index: 1;
     display: grid;
-    min-height: 100vh;
-    min-height: 100svh;
     align-items: center;
     overflow: hidden;
-    padding: clamp(60px, 8vh, 88px) 24px clamp(64px, 9vh, 96px);
+    padding: 48px 24px;
     color: #fffaf5;
     background: radial-gradient(ellipse at top, #624347 0%, #392b2b 62%);
 }
@@ -624,7 +622,7 @@ body {
 }
 
 .promises__heading {
-    margin: 0 0 34px;
+    margin: 0 0 24px;
     color: #fffaf5;
     font-family: "Playfair Display", Georgia, serif;
     font-size: clamp(2.4rem, 5vw, 3.8rem);
@@ -666,7 +664,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     gap: 12px;
-    margin: 26px auto 0;
+    margin: 18px auto 0;
 }
 
 .promises__control {
@@ -721,6 +719,7 @@ body {
     font-family: "Playfair Display", Georgia, serif;
     font-size: 25px;
     font-weight: 400;
+    text-align: center;
 }
 
 .promise-card p {
@@ -820,11 +819,11 @@ footer {
 
 @media (max-width: 600px) {
     .promises {
-        padding: 68px 18px 74px;
+        padding: 40px 18px;
     }
 
     .promises__heading {
-        margin-bottom: 26px;
+        margin-bottom: 20px;
     }
 
     .promises__grid {

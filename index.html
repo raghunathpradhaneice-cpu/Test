@@ -544,7 +544,7 @@ body {
 }
 
 .letter {
-    padding: 100px 24px 8px;
+    padding: 100px 24px 64px;
     background: #f3ece7;
 }
 
@@ -587,8 +587,12 @@ body {
 .promises {
     position: relative;
     z-index: 1;
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: center;
     overflow: hidden;
-    padding: 88px 24px 96px;
+    padding: clamp(60px, 8vh, 88px) 24px clamp(64px, 9vh, 96px);
     color: #fffaf5;
     background: radial-gradient(ellipse at top, #624347 0%, #392b2b 62%);
 }
@@ -690,10 +694,6 @@ body {
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.8;
-}
-
-.promises__control svg[hidden] {
-    display: none;
 }
 
 .promises__control:hover {
@@ -976,7 +976,7 @@ footer {
     }
 
     .letter {
-        padding: 76px 25px 8px;
+        padding: 76px 25px 52px;
     }
 
     .letter h2 {
@@ -1093,8 +1093,7 @@ footer {
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
                 </button>
                 <button class="promises__control" id="promises-pause" type="button" aria-label="Pause slideshow" aria-pressed="false">
-                    <svg id="promises-pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"></path></svg>
-                    <svg id="promises-play-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m8 5 11 7-11 7z"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path id="promises-playback-icon" d="M8 5v14M16 5v14"></path></svg>
                 </button>
             </div>
         </div>
@@ -1338,8 +1337,7 @@ footer {
   const promisesPrevious = document.getElementById('promises-previous');
   const promisesNext = document.getElementById('promises-next');
   const promisesPause = document.getElementById('promises-pause');
-  const promisesPauseIcon = document.getElementById('promises-pause-icon');
-  const promisesPlayIcon = document.getElementById('promises-play-icon');
+  const promisesPlaybackIcon = document.getElementById('promises-playback-icon');
   const promisesSection = document.querySelector('.promises');
   const promisesInterval = 6000;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1367,8 +1365,7 @@ footer {
     stopPromiseTimer();
     promisesPause.setAttribute('aria-label', promisesPaused ? 'Play slideshow' : 'Pause slideshow');
     promisesPause.setAttribute('aria-pressed', String(promisesPaused));
-    promisesPauseIcon.hidden = promisesPaused;
-    promisesPlayIcon.hidden = !promisesPaused;
+    promisesPlaybackIcon.setAttribute('d', promisesPaused ? 'm8 5 11 7-11 7z' : 'M8 5v14M16 5v14');
     if (!promisesPaused && promisesVisible) {
       promisesTimer = setInterval(() => showPromise(currentPromise + 1), promisesInterval);
     }

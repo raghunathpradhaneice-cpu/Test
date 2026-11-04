@@ -628,8 +628,9 @@ body {
 
 .promises__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .promise-card {
@@ -643,10 +644,73 @@ body {
     transition: transform .25s ease, border-color .25s ease, background .25s ease;
 }
 
+.promise-card[hidden] {
+    display: none;
+}
+
 .promise-card:hover {
     transform: translateY(-5px);
     border-color: rgba(240, 196, 189, .55);
     background: linear-gradient(145deg, rgba(255, 250, 245, .17), rgba(255, 250, 245, .08));
+}
+
+.promises__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 26px auto 0;
+}
+
+.promises__control {
+    display: inline-grid;
+    min-width: 48px;
+    min-height: 44px;
+    place-items: center;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 250, 245, .32);
+    border-radius: 999px;
+    color: #fffaf5;
+    background: rgba(255, 250, 245, .1);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.promises__control svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.promises__control svg[hidden] {
+    display: none;
+}
+
+.promises__control:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 250, 245, .18);
+}
+
+.promises__control:focus-visible {
+    outline: 3px solid #f0c4bd;
+    outline-offset: 3px;
+}
+
+.promises__status {
+    min-width: 52px;
+    color: rgba(255, 250, 245, .78);
+    font-size: 13px;
+    text-align: center;
 }
 
 .promise-card__number {
@@ -998,27 +1062,40 @@ footer {
             <p class="promises__eyebrow">From my heart, to yours</p>
             <h2 class="promises__heading" id="promises-title">Promises I want to keep</h2>
             <p class="promises__intro">Not grand words for a perfect story—small, honest promises for the real moments we share.</p>
-            <div class="promises__grid">
-                <article class="promise-card">
+            <div class="promises__grid" id="promises-slides">
+                <article class="promise-card" aria-roledescription="slide">
                     <span class="promise-card__number">01</span>
                     <h3>I will really listen</h3>
                     <p>I promise to make room for your thoughts and feelings—not just hear your words, but try to understand what matters to you.</p>
                 </article>
-                <article class="promise-card">
+                <article class="promise-card" aria-roledescription="slide" hidden>
                     <span class="promise-card__number">02</span>
                     <h3>I will show up</h3>
                     <p>On ordinary days and difficult ones, I promise to be present, steady, and someone you can count on.</p>
                 </article>
-                <article class="promise-card">
+                <article class="promise-card" aria-roledescription="slide" hidden>
                     <span class="promise-card__number">03</span>
                     <h3>I will choose kindness</h3>
                     <p>Even when we disagree, I promise to speak with care, be honest, and meet you with respect.</p>
                 </article>
-                <article class="promise-card">
+                <article class="promise-card" aria-roledescription="slide" hidden>
                     <span class="promise-card__number">04</span>
                     <h3>I will keep choosing us</h3>
                     <p>I promise to keep learning, growing, and making time for the little moments that make a life feel like ours.</p>
                 </article>
+            </div>
+            <div class="promises__controls" role="group" aria-label="Promise slideshow controls">
+                <button class="promises__control" id="promises-previous" type="button" aria-label="Previous promise">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <span class="promises__status" id="promises-status" aria-live="polite"></span>
+                <button class="promises__control" id="promises-next" type="button" aria-label="Next promise">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+                <button class="promises__control" id="promises-pause" type="button" aria-label="Pause slideshow" aria-pressed="false">
+                    <svg id="promises-pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"></path></svg>
+                    <svg id="promises-play-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m8 5 11 7-11 7z"></path></svg>
+                </button>
             </div>
         </div>
     </section>
@@ -1253,6 +1330,69 @@ footer {
     } catch (error) {
       updateMusicToggle(false);
       console.error('Unable to play romantic music:', error);
+    }
+  });
+
+  const promiseSlides = Array.from(document.querySelectorAll('.promise-card'));
+  const promisesStatus = document.getElementById('promises-status');
+  const promisesPrevious = document.getElementById('promises-previous');
+  const promisesNext = document.getElementById('promises-next');
+  const promisesPause = document.getElementById('promises-pause');
+  const promisesPauseIcon = document.getElementById('promises-pause-icon');
+  const promisesPlayIcon = document.getElementById('promises-play-icon');
+  const promisesSection = document.querySelector('.promises');
+  const promisesInterval = 6000;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let currentPromise = 0;
+  let promisesTimer = null;
+  let promisesPaused = reducedMotion.matches;
+  let promisesVisible = false;
+
+  function showPromise(index) {
+    currentPromise = (index + promiseSlides.length) % promiseSlides.length;
+    promiseSlides.forEach((slide, slideIndex) => {
+      slide.hidden = slideIndex !== currentPromise;
+    });
+    promisesStatus.textContent = `${currentPromise + 1} of ${promiseSlides.length}`;
+  }
+
+  function stopPromiseTimer() {
+    if (promisesTimer !== null) {
+      clearInterval(promisesTimer);
+      promisesTimer = null;
+    }
+  }
+
+  function updatePromisePlayback() {
+    stopPromiseTimer();
+    promisesPause.setAttribute('aria-label', promisesPaused ? 'Play slideshow' : 'Pause slideshow');
+    promisesPause.setAttribute('aria-pressed', String(promisesPaused));
+    promisesPauseIcon.hidden = promisesPaused;
+    promisesPlayIcon.hidden = !promisesPaused;
+    if (!promisesPaused && promisesVisible) {
+      promisesTimer = setInterval(() => showPromise(currentPromise + 1), promisesInterval);
+    }
+  }
+
+  promisesPrevious.addEventListener('click', () => showPromise(currentPromise - 1));
+  promisesNext.addEventListener('click', () => showPromise(currentPromise + 1));
+  promisesPause.addEventListener('click', () => {
+    promisesPaused = !promisesPaused;
+    updatePromisePlayback();
+  });
+  showPromise(0);
+  updatePromisePlayback();
+
+  const promisesObserver = new IntersectionObserver(([entry]) => {
+    promisesVisible = entry.isIntersecting;
+    updatePromisePlayback();
+  });
+  promisesObserver.observe(promisesSection);
+
+  reducedMotion.addEventListener('change', (event) => {
+    if (event.matches) {
+      promisesPaused = true;
+      updatePromisePlayback();
     }
   });
 

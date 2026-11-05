@@ -698,9 +698,14 @@ body {
     stroke-width: 1.8;
 }
 
-.promises__control:hover {
+.promises__control:hover:not(:disabled) {
     transform: translateY(-2px);
     background: rgba(255, 250, 245, .18);
+}
+
+.promises__control:disabled {
+    opacity: .4;
+    cursor: not-allowed;
 }
 
 .promises__control:focus-visible {
@@ -1307,10 +1312,12 @@ footer {
   let currentPromise = 0;
 
   function showPromise(index) {
-    currentPromise = (index + promiseSlides.length) % promiseSlides.length;
+        currentPromise = Math.max(0, Math.min(index, promiseSlides.length - 1));
     promiseSlides.forEach((slide, slideIndex) => {
       slide.hidden = slideIndex !== currentPromise;
     });
+        promisesPrevious.disabled = currentPromise === 0;
+        promisesNext.disabled = currentPromise === promiseSlides.length - 1;
     promisesStatus.textContent = `${currentPromise + 1} of ${promiseSlides.length}`;
   }
 

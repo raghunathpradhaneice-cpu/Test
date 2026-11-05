@@ -1055,16 +1055,13 @@ footer {
                     <p>I promise to keep learning, growing, and making time for the little moments that make a life feel like ours.</p>
                 </article>
             </div>
-            <div class="promises__controls" role="group" aria-label="Promise slideshow controls">
+            <div class="promises__controls" role="group" aria-label="Promise navigation">
                 <button class="promises__control" id="promises-previous" type="button" aria-label="Previous promise">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
                 </button>
-                <span class="promises__status" id="promises-status" aria-live="polite"></span>
+                <span class="promises__status" id="promises-status" aria-live="polite" aria-atomic="true"></span>
                 <button class="promises__control" id="promises-next" type="button" aria-label="Next promise">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
-                </button>
-                <button class="promises__control" id="promises-pause" type="button" aria-label="Pause slideshow" aria-pressed="false">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path id="promises-playback-icon" d="M8 5v14M16 5v14"></path></svg>
                 </button>
             </div>
         </div>
@@ -1308,15 +1305,7 @@ footer {
   const promisesStatus = document.getElementById('promises-status');
   const promisesPrevious = document.getElementById('promises-previous');
   const promisesNext = document.getElementById('promises-next');
-  const promisesPause = document.getElementById('promises-pause');
-  const promisesPlaybackIcon = document.getElementById('promises-playback-icon');
-  const promisesSection = document.querySelector('.promises');
-  const promisesInterval = 6000;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let currentPromise = 0;
-  let promisesTimer = null;
-  let promisesPaused = reducedMotion.matches;
-  let promisesVisible = false;
 
   function showPromise(index) {
     currentPromise = (index + promiseSlides.length) % promiseSlides.length;
@@ -1326,44 +1315,9 @@ footer {
     promisesStatus.textContent = `${currentPromise + 1} of ${promiseSlides.length}`;
   }
 
-  function stopPromiseTimer() {
-    if (promisesTimer !== null) {
-      clearInterval(promisesTimer);
-      promisesTimer = null;
-    }
-  }
-
-  function updatePromisePlayback() {
-    stopPromiseTimer();
-    promisesPause.setAttribute('aria-label', promisesPaused ? 'Play slideshow' : 'Pause slideshow');
-    promisesPause.setAttribute('aria-pressed', String(promisesPaused));
-    promisesPlaybackIcon.setAttribute('d', promisesPaused ? 'm8 5 11 7-11 7z' : 'M8 5v14M16 5v14');
-    if (!promisesPaused && promisesVisible) {
-      promisesTimer = setInterval(() => showPromise(currentPromise + 1), promisesInterval);
-    }
-  }
-
   promisesPrevious.addEventListener('click', () => showPromise(currentPromise - 1));
   promisesNext.addEventListener('click', () => showPromise(currentPromise + 1));
-  promisesPause.addEventListener('click', () => {
-    promisesPaused = !promisesPaused;
-    updatePromisePlayback();
-  });
   showPromise(0);
-  updatePromisePlayback();
-
-  const promisesObserver = new IntersectionObserver(([entry]) => {
-    promisesVisible = entry.isIntersecting;
-    updatePromisePlayback();
-  });
-  promisesObserver.observe(promisesSection);
-
-  reducedMotion.addEventListener('change', (event) => {
-    if (event.matches) {
-      promisesPaused = true;
-      updatePromisePlayback();
-    }
-  });
 
   const noteCards = Array.from(document.querySelectorAll('.note-card'));
   const noteLinks = document.querySelectorAll('[data-message]');

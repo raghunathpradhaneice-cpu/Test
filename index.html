@@ -326,8 +326,13 @@ body {
 }
 
 .note-view {
-    max-width: 720px;
-    margin: 32px auto 0;
+    position: fixed;
+    inset: 0;
+    width: min(720px, calc(100% - 32px));
+    max-width: none;
+    max-height: min(80vh, 640px);
+    overflow-y: auto;
+    margin: auto;
     padding: 30px clamp(22px, 5vw, 48px);
     border: 1px solid rgba(141, 93, 88, .2);
     border-radius: 26px;
@@ -336,8 +341,9 @@ body {
     text-align: center;
 }
 
-.note-view[hidden] {
-    display: none;
+.note-view::backdrop {
+    background: rgba(39, 29, 28, .62);
+    backdrop-filter: blur(5px);
 }
 
 .note-view__tag {
@@ -915,7 +921,7 @@ footer {
     }
 
     .note-view {
-        margin-top: 24px;
+        max-height: 85vh;
         padding: 26px 20px;
         border-radius: 22px;
     }
@@ -1156,12 +1162,12 @@ footer {
                 </button>
                 <span class="note-pagination__status" id="notes-page-status" aria-live="polite"></span>
             </nav>
-            <section class="note-view" id="note-view" aria-labelledby="note-view-title" aria-live="polite" hidden>
+            <dialog class="note-view" id="note-view" aria-labelledby="note-view-title">
                 <p class="note-view__tag" id="note-view-tag"></p>
                 <h3 id="note-view-title" tabindex="-1"></h3>
                 <p class="note-view__message" id="note-view-message"></p>
                 <button class="note-view__close" id="note-view-close" type="button">Close note</button>
-            </section>
+            </dialog>
         </div>
     </section>
 </main>
@@ -1377,7 +1383,6 @@ footer {
 
   function showNotesPage(page, shouldScroll = false) {
     currentNotesPage = Math.max(0, Math.min(page, totalNotesPages - 1));
-    noteView.hidden = true;
     activeNoteLink = null;
 
     noteCards.forEach((card, index) => {
@@ -1419,16 +1424,19 @@ footer {
       noteViewTag.textContent = card.querySelector('.note-card__tag').textContent;
       noteViewTitle.textContent = card.querySelector('h3').textContent;
       noteViewMessage.textContent = this.dataset.message;
-      noteView.hidden = false;
-      noteView.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      noteView.showModal();
       noteViewTitle.focus({ preventScroll: true });
     });
   });
 
   noteViewClose.addEventListener('click', () => {
-    noteView.hidden = true;
+    noteView.close();
+  });
+
+  noteView.addEventListener('close', () => {
     if (activeNoteLink) {
       activeNoteLink.focus();
+      activeNoteLink = null;
     }
   });
 </script>

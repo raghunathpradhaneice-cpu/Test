@@ -564,7 +564,6 @@ body {
 .letter__inner {
     max-width: 720px;
     margin: 0 auto;
-    animation: rise-in 1s ease both;
 }
 
 .letter__eyebrow {
@@ -658,6 +657,29 @@ body {
     transform: translateY(-5px);
     border-color: rgba(240, 196, 189, .55);
     background: linear-gradient(145deg, rgba(255, 250, 245, .17), rgba(255, 250, 245, .08));
+}
+
+.promise-card__icon {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    place-items: center;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(240, 196, 189, .38);
+    border-radius: 50%;
+    color: #f0c4bd;
+    background: rgba(255, 250, 245, .08);
+}
+
+.promise-card__icon svg {
+    display: block;
+    width: 27px;
+    height: 27px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
 }
 
 .promises__controls {
@@ -1027,12 +1049,12 @@ footer {
         <div class="letter__inner">
             <p class="letter__salutation">Dear you,</p>
             <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
-            <p>We may not have talked much, but from the very beginning, there was something about you that felt special. Your presence, your calmness, and your energy made me feel something beautiful that I can't quite explain.</p>
+            <p>We may not have talked much yet, but I’ve really enjoyed getting to know you. There’s something about our conversations that leaves me smiling, and I’m looking forward to seeing where this sweet little connection takes us.</p>
             <p>I can't promise you the whole world, but I promise to stand by you through every high and low, to choose you every day, and to never stop making you feel valued.</p>
             <p>And honestly, when I think about us, I see something beautiful — a future, a home, and a lifetime together. I don't know what tomorrow holds, but I know I'd love for it to be with you.</p>
             <div class="signoff">
                 <span>With all my heart 💕</span>
-                <p class="signature">Your forever person</p>
+                <p class="signature">To someone I’m happy to have met</p>
             </div>
         </div>
     </section>
@@ -1040,21 +1062,33 @@ footer {
     <section class="promises" aria-labelledby="promises-title">
         <div class="promises__inner">
             <p class="promises__eyebrow">From my heart, to yours</p>
-            <h2 class="promises__heading" id="promises-title">Promises I want to keep</h2>
+            <h2 class="promises__heading" id="promises-title">The little things I hope to share.</h2>
             <div class="promises__grid" id="promises-slides">
                 <article class="promise-card" aria-roledescription="slide">
+                    <span class="promise-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-5.5a7.5 7.5 0 1 1 17-4Z"></path><path d="M8 11h8M8 14h5"></path></svg>
+                    </span>
                     <h3>I will really listen</h3>
                     <p>I promise to make room for your thoughts and feelings—not just hear your words, but try to understand what matters to you.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
+                    <span class="promise-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2M8 2.8 6.5 4M16 2.8 17.5 4"></path></svg>
+                    </span>
                     <h3>I will show up</h3>
                     <p>On ordinary days and difficult ones, I promise to be present, steady, and someone you can count on.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
+                    <span class="promise-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 10-8.8 10s-8.8-4.8-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"></path><path d="m8.8 11.5 2 2 4.5-4.5"></path></svg>
+                    </span>
                     <h3>I will choose kindness</h3>
                     <p>Even when we disagree, I promise to speak with care, be honest, and meet you with respect.</p>
                 </article>
                 <article class="promise-card" aria-roledescription="slide" hidden>
+                    <span class="promise-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 20s-8-4.4-8-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.6-8 10-8 10Z"></path><path d="M8 12h2l1.2-2.2L13 15l1.2-3H16"></path></svg>
+                    </span>
                     <h3>I will keep choosing us</h3>
                     <p>I promise to keep learning, growing, and making time for the little moments that make a life feel like ours.</p>
                 </article>
@@ -1082,7 +1116,7 @@ footer {
                         <h3>That day</h3>
                         <p>I met you and I liked you as a person before I even knew how much you would mean to me.</p>
                     </div>
-                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. I cannot promise the world to you, but I promise I will fight with the world for you. ✨">Read my note →</a>
+                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. ✨">Read my note →</a>
                 </article>
 
                 <article class="note-card">

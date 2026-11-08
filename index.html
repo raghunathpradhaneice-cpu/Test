@@ -34,7 +34,7 @@ body {
     right: 18px;
     z-index: 30;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
     gap: 10px;
 }
@@ -93,6 +93,131 @@ body {
 .music-toggle-label {
     min-width: 34px;
     font-size: 14px;
+}
+
+.music-list-toggle {
+    min-height: 48px;
+    padding: 0 15px;
+    border: 1px solid rgba(255, 243, 240, 0.75);
+    border-radius: 999px;
+    color: #fffaf5;
+    background: rgba(57, 43, 43, 0.78);
+    box-shadow: 0 12px 26px rgba(39, 29, 28, 0.22);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: transform .2s ease, background .2s ease;
+}
+
+.music-list-toggle:hover {
+    transform: translateY(-2px);
+    background: rgba(105, 57, 65, 0.9);
+}
+
+.music-list-toggle:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+}
+
+.music-panel {
+    position: fixed;
+    top: 130px;
+    right: 18px;
+    z-index: 35;
+    width: min(290px, calc(100vw - 28px));
+    padding: 16px 14px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 22px;
+    background: rgba(36, 25, 25, 0.78);
+    box-shadow: 0 20px 42px rgba(22, 15, 15, 0.28);
+    backdrop-filter: blur(12px);
+}
+
+.music-panel[hidden] {
+    display: none;
+}
+
+.music-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+    color: #f9efe8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.music-panel__caption {
+    margin: 0 0 12px;
+    color: rgba(255, 250, 245, 0.76);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.music-panel__close {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 229, 220, 0.62);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8d7cf, #d77a8a);
+    color: #542a31;
+    box-shadow: 0 0 0 3px rgba(245, 198, 209, 0.16), 0 5px 14px rgba(15, 10, 10, 0.24);
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.music-panel__close:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(245, 198, 209, 0.24), 0 7px 18px rgba(15, 10, 10, 0.3);
+}
+
+.music-panel__close:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+}
+
+.music-panel__list {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.music-track {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 250, 245, 0.9);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.music-track:hover {
+    transform: translateY(-1px);
+    border-color: rgba(240, 196, 189, 0.45);
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.music-track.is-selected {
+    border-color: rgba(240, 196, 189, 0.7);
+    background: rgba(204, 118, 129, 0.18);
+    color: #fff4ef;
 }
 
 .floating-hearts {
@@ -1021,6 +1146,20 @@ footer {
             <span class="music-toggle-label" id="music-toggle-label">Play</span>
         </span>
     </button>
+    <button class="music-list-toggle" id="music-list-toggle" type="button" aria-controls="music-panel" aria-expanded="false">Songs</button>
+    <div class="music-panel" id="music-panel" hidden>
+        <div class="music-panel__header">
+            <span>A little music for you</span>
+            <button class="music-panel__close" id="music-panel-close" type="button" aria-label="Close music list">×</button>
+        </div>
+        <p class="music-panel__caption">Since you mentioned you love songs, here’s a playlist for you.</p>
+        <ul class="music-panel__list">
+            <li><button class="music-track is-selected" type="button" data-track="a-thousand-years" aria-pressed="true">1. A Thousand Years</button></li>
+            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">2. Until I Found You</button></li>
+            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">3. I Think They Call This Love</button></li>
+            <li><button class="music-track" type="button" data-track="perfect" aria-pressed="false">4. Perfect</button></li>
+        </ul>
+    </div>
 </div>
 <div class="floating-hearts" aria-hidden="true">
     <span>♥</span>
@@ -1055,9 +1194,9 @@ footer {
         <div class="letter__inner">
             <p class="letter__salutation">Dear you,</p>
             <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
-            <p>We may not have talked much yet, but I’ve really enjoyed getting to know you. There’s something about our conversations that leaves me smiling, and I’m looking forward to seeing where this sweet little connection takes us.</p>
-            <p>I can't promise you the whole world, but I promise to stand by you through every high and low, to choose you every day, and to never stop making you feel valued.</p>
-            <p>And honestly, when I think about us, I see something beautiful — a future, a home, and a lifetime together. I don't know what tomorrow holds, but I know I'd love for it to be with you.</p>
+            <p>The day I met you, something changed in me. Though we’re still getting to know each other, every conversation with you brings a smile to my face.</p>
+            <p>I can’t promise you the whole world, but I promise to stand by you, choose you through every high and low, and always make you feel loved and valued.</p>
+            <p>I don’t know what tomorrow holds, but I know I’d love to discover it with you — building beautiful memories, a happy home, and, hopefully, a lifetime together.</p>
             <div class="signoff">
                 <span>With all my heart 💕</span>
                 <p class="signature">To someone I’m happy to have met</p>
@@ -1177,133 +1316,30 @@ footer {
   const musicToggle = document.getElementById('music-toggle');
   const musicToggleIcon = document.getElementById('music-toggle-icon');
   const musicToggleLabel = document.getElementById('music-toggle-label');
-  let audioContext = null;
-  let masterGain = null;
-  let playbackTimer = null;
-  let currentStep = 0;
-  let nextNoteTime = 0;
+  const musicListToggle = document.getElementById('music-list-toggle');
+  const musicPanel = document.getElementById('music-panel');
+  const musicPanelClose = document.getElementById('music-panel-close');
+  const musicTrackButtons = Array.from(document.querySelectorAll('.music-track'));
+  const musicLibrary = {
+    'a-thousand-years': 'AThousandYears.mp3',
+    'until-i-found-you': 'Until I Found You.mp3',
+    'they-call-this-love': 'I think they call this love.mp3',
+    perfect: 'Perfect.mp3'
+  };
+  let selectedTrack = 'a-thousand-years';
+  let currentAudio = null;
 
-  const tempo = 74;
-  const stepDuration = 60 / tempo / 2;
-  const melody = [
-    64, 67, 69, 67, 64, 62, 60, null,
-    62, 67, 71, 69, 67, 62, 64, null,
-    60, 64, 69, 67, 64, 60, 62, null,
-    57, 60, 65, 64, 60, 57, 55, null
-  ];
-  const chords = [
-    { notes: [48, 52, 55, 59], bass: 36 },
-    { notes: [43, 50, 55, 59], bass: 43 },
-    { notes: [45, 48, 52, 55], bass: 45 },
-    { notes: [41, 45, 48, 52], bass: 41 }
-  ];
-
-  function frequencyForMidi(note) {
-    return 440 * Math.pow(2, (note - 69) / 12);
-  }
-
-  function initializeAudio() {
-    const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextConstructor) {
-      throw new Error('Web Audio is not supported by this browser.');
-    }
-
-    audioContext = new AudioContextConstructor();
-    masterGain = audioContext.createGain();
-    masterGain.gain.value = 0;
-
-    const reverb = audioContext.createConvolver();
-    const reverbLength = Math.floor(audioContext.sampleRate * 2.4);
-    const impulse = audioContext.createBuffer(2, reverbLength, audioContext.sampleRate);
-    for (let channel = 0; channel < impulse.numberOfChannels; channel++) {
-      const samples = impulse.getChannelData(channel);
-      for (let index = 0; index < samples.length; index++) {
-        samples[index] = (Math.random() * 2 - 1) * Math.pow(1 - index / samples.length, 3);
-      }
-    }
-    reverb.buffer = impulse;
-
-    const dryGain = audioContext.createGain();
-    const wetGain = audioContext.createGain();
-    dryGain.gain.value = 0.76;
-    wetGain.gain.value = 0.3;
-    masterGain.connect(dryGain);
-    masterGain.connect(reverb);
-    dryGain.connect(audioContext.destination);
-    reverb.connect(wetGain);
-    wetGain.connect(audioContext.destination);
-  }
-
-  function playPianoNote(note, startTime, duration, volume) {
-    if (note === null) {
+  function updateSelectedTrack(trackKey) {
+    if (!Object.hasOwn(musicLibrary, trackKey)) {
       return;
     }
 
-    const fundamental = frequencyForMidi(note);
-    const noteGain = audioContext.createGain();
-    const filter = audioContext.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(2400, startTime);
-    noteGain.gain.setValueAtTime(0.0001, startTime);
-    noteGain.gain.linearRampToValueAtTime(volume, startTime + 0.025);
-    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-    filter.connect(noteGain);
-    noteGain.connect(masterGain);
-
-    const body = audioContext.createOscillator();
-    body.type = 'triangle';
-    body.frequency.setValueAtTime(fundamental, startTime);
-    body.connect(filter);
-    body.start(startTime);
-    body.stop(startTime + duration + 0.04);
-
-    const shimmer = audioContext.createOscillator();
-    const shimmerGain = audioContext.createGain();
-    shimmer.type = 'sine';
-    shimmer.frequency.setValueAtTime(fundamental * 2, startTime);
-    shimmerGain.gain.value = 0.22;
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(filter);
-    shimmer.start(startTime);
-    shimmer.stop(startTime + duration + 0.04);
-  }
-
-  function playPad(chord, startTime) {
-    chord.notes.forEach((note) => {
-      const oscillator = audioContext.createOscillator();
-      const envelope = audioContext.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(frequencyForMidi(note), startTime);
-      envelope.gain.setValueAtTime(0.0001, startTime);
-      envelope.gain.linearRampToValueAtTime(0.014, startTime + 0.35);
-      envelope.gain.setTargetAtTime(0.0001, startTime + stepDuration * 7.5, 0.45);
-      oscillator.connect(envelope);
-      envelope.connect(masterGain);
-      oscillator.start(startTime);
-      oscillator.stop(startTime + stepDuration * 8 + 0.5);
+    selectedTrack = trackKey;
+    musicTrackButtons.forEach((button) => {
+      const isSelected = button.dataset.track === trackKey;
+      button.classList.toggle('is-selected', isSelected);
+      button.setAttribute('aria-pressed', String(isSelected));
     });
-
-    playPianoNote(chord.bass, startTime, stepDuration * 3.5, 0.075);
-    playPianoNote(chord.bass + 12, startTime + stepDuration * 4, stepDuration * 2.5, 0.04);
-  }
-
-  function scheduleMusic() {
-    while (nextNoteTime < audioContext.currentTime + 0.2) {
-      const step = currentStep % melody.length;
-      const chord = chords[Math.floor(step / 8) % chords.length];
-
-      if (step % 8 === 0) {
-        playPad(chord, nextNoteTime);
-      }
-      if (step % 2 === 0) {
-        const arpeggioNote = chord.notes[(step / 2) % chord.notes.length] + 12;
-        playPianoNote(arpeggioNote, nextNoteTime, stepDuration * 1.65, 0.025);
-      }
-      playPianoNote(melody[step], nextNoteTime, stepDuration * 1.8, 0.09);
-
-      currentStep++;
-      nextNoteTime += stepDuration;
-    }
   }
 
   function updateMusicToggle(isPlaying) {
@@ -1315,34 +1351,70 @@ footer {
       : '<path d="M8 5v14l11-7z"></path>';
   }
 
-  musicToggle.addEventListener('click', async () => {
-    try {
-      if (!audioContext) {
-        initializeAudio();
-      }
-
-      if (playbackTimer !== null) {
-        clearInterval(playbackTimer);
-        playbackTimer = null;
-        masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-        masterGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.08);
-        updateMusicToggle(false);
+  musicTrackButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const nextTrack = button.dataset.track;
+      if (!Object.hasOwn(musicLibrary, nextTrack)) {
+        console.error(`Unknown music track: ${nextTrack}`);
         return;
       }
 
-      await audioContext.resume();
-      masterGain.gain.cancelScheduledValues(audioContext.currentTime);
-      masterGain.gain.setValueAtTime(masterGain.gain.value, audioContext.currentTime);
-      masterGain.gain.linearRampToValueAtTime(0.55, audioContext.currentTime + 0.3);
-      currentStep = 0;
-      nextNoteTime = audioContext.currentTime + 0.08;
-      scheduleMusic();
-      playbackTimer = setInterval(scheduleMusic, 100);
-      updateMusicToggle(true);
-    } catch (error) {
+      updateSelectedTrack(nextTrack);
+      musicPanel.hidden = true;
+      musicListToggle.setAttribute('aria-expanded', 'false');
+
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+
+      const fileName = musicLibrary[selectedTrack];
+      currentAudio = new Audio(new URL(fileName, document.baseURI).href);
+      currentAudio.addEventListener('ended', () => updateMusicToggle(false));
+      currentAudio.addEventListener('error', () => {
+        updateMusicToggle(false);
+        console.error(`Unable to load music file: ${fileName}`);
+      });
+
+      try {
+        await currentAudio.play();
+        updateMusicToggle(true);
+      } catch (error) {
+        updateMusicToggle(false);
+        console.error(`Unable to play music file: ${fileName}`, error);
+      }
+    });
+  });
+
+  musicPanelClose.addEventListener('click', () => {
+    musicPanel.hidden = true;
+    musicListToggle.setAttribute('aria-expanded', 'false');
+  });
+
+  musicListToggle.addEventListener('click', () => {
+    musicPanel.hidden = !musicPanel.hidden;
+    musicListToggle.setAttribute('aria-expanded', String(!musicPanel.hidden));
+  });
+
+  musicToggle.addEventListener('click', async () => {
+    if (currentAudio && !currentAudio.paused) {
+      currentAudio.pause();
       updateMusicToggle(false);
-      console.error('Unable to play romantic music:', error);
+      return;
     }
+
+    if (currentAudio) {
+      try {
+        await currentAudio.play();
+        updateMusicToggle(true);
+      } catch (error) {
+        updateMusicToggle(false);
+        console.error(`Unable to resume music file: ${musicLibrary[selectedTrack]}`, error);
+      }
+      return;
+    }
+
+    musicPanel.hidden = !musicPanel.hidden;
+    musicListToggle.setAttribute('aria-expanded', String(!musicPanel.hidden));
   });
 
   const promiseSlides = Array.from(document.querySelectorAll('.promise-card'));

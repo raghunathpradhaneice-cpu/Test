@@ -1150,7 +1150,7 @@ footer {
 
 <body>
 <div class="music-widget" aria-label="Music controls">
-    <button class="music-toggle" id="music-toggle" type="button" aria-label="Play romantic music">
+    <button class="music-toggle" id="music-toggle" type="button" aria-label="Choose a song from the Songs list before playing">
         <span class="music-toggle__content">
             <svg id="music-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
             <span class="music-toggle-label" id="music-toggle-label">Play</span>
@@ -1163,7 +1163,7 @@ footer {
             <ellipse cx="15" cy="18" rx="2" ry="1.5" transform="rotate(-20 15 18)"></ellipse>
             <ellipse cx="19" cy="16" rx="2" ry="1.5" transform="rotate(-20 19 16)"></ellipse>
         </svg>
-        <span>Songs</span>
+        <span>Pick a song</span>
     </button>
     <div class="music-panel" id="music-panel" hidden>
         <div class="music-panel__header">
@@ -1172,7 +1172,7 @@ footer {
         </div>
         <p class="music-panel__caption">Since you mentioned you love songs, here’s a playlist for you.</p>
         <ul class="music-panel__list">
-            <li><button class="music-track is-selected" type="button" data-track="a-thousand-years" aria-pressed="true">1. A Thousand Years</button></li>
+            <li><button class="music-track" type="button" data-track="a-thousand-years" aria-pressed="false">1. A Thousand Years</button></li>
             <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">2. Until I Found You</button></li>
             <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">3. I Think They Call This Love</button></li>
             <li><button class="music-track" type="button" data-track="perfect" aria-pressed="false">4. Perfect</button></li>
@@ -1344,7 +1344,7 @@ footer {
     'they-call-this-love': 'I think they call this love.mp3',
     perfect: 'Perfect.mp3'
   };
-  let selectedTrack = 'a-thousand-years';
+  let selectedTrack = null;
   let currentAudio = null;
 
   function updateSelectedTrack(trackKey) {
@@ -1414,6 +1414,10 @@ footer {
   });
 
   musicToggle.addEventListener('click', async () => {
+    if (!selectedTrack) {
+      return;
+    }
+
     if (currentAudio && !currentAudio.paused) {
       currentAudio.pause();
       updateMusicToggle(false);
@@ -1431,8 +1435,21 @@ footer {
       return;
     }
 
-    musicPanel.hidden = !musicPanel.hidden;
-    musicListToggle.setAttribute('aria-expanded', String(!musicPanel.hidden));
+    const fileName = musicLibrary[selectedTrack];
+    currentAudio = new Audio(new URL(fileName, document.baseURI).href);
+    currentAudio.addEventListener('ended', () => updateMusicToggle(false));
+    currentAudio.addEventListener('error', () => {
+      updateMusicToggle(false);
+      console.error(`Unable to load music file: ${fileName}`);
+    });
+
+    try {
+      await currentAudio.play();
+      updateMusicToggle(true);
+    } catch (error) {
+      updateMusicToggle(false);
+      console.error(`Unable to play music file: ${fileName}`, error);
+    }
   });
 
   const promiseSlides = Array.from(document.querySelectorAll('.promise-card'));

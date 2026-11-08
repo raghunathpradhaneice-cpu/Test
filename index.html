@@ -96,24 +96,34 @@ body {
 }
 
 .music-list-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     min-height: 48px;
     padding: 0 15px;
-    border: 1px solid rgba(255, 243, 240, 0.75);
+    border: 0;
     border-radius: 999px;
-    color: #fffaf5;
-    background: rgba(57, 43, 43, 0.78);
-    box-shadow: 0 12px 26px rgba(39, 29, 28, 0.22);
+    color: #5f2c33;
+    background: linear-gradient(135deg, #fff3f0 0%, #f5c6d1 40%, #d77a8a 100%);
+    box-shadow: 0 12px 26px rgba(144, 60, 74, 0.25), inset 0 0 12px rgba(255, 255, 255, 0.45);
     font: inherit;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: transform .2s ease, background .2s ease;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .music-list-toggle:hover {
     transform: translateY(-2px);
-    background: rgba(105, 57, 65, 0.9);
+    box-shadow: 0 16px 30px rgba(144, 60, 74, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.6);
+}
+
+.music-list-toggle svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
 }
 
 .music-list-toggle:focus-visible {
@@ -1146,7 +1156,15 @@ footer {
             <span class="music-toggle-label" id="music-toggle-label">Play</span>
         </span>
     </button>
-    <button class="music-list-toggle" id="music-list-toggle" type="button" aria-controls="music-panel" aria-expanded="false">Songs</button>
+    <button class="music-list-toggle" id="music-list-toggle" type="button" aria-controls="music-panel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h9M4 10h7M4 14h6"></path>
+            <path d="M17 17V5l4-1v11"></path>
+            <ellipse cx="15" cy="18" rx="2" ry="1.5" transform="rotate(-20 15 18)"></ellipse>
+            <ellipse cx="19" cy="16" rx="2" ry="1.5" transform="rotate(-20 19 16)"></ellipse>
+        </svg>
+        <span>Songs</span>
+    </button>
     <div class="music-panel" id="music-panel" hidden>
         <div class="music-panel__header">
             <span>A little music for you</span>

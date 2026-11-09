@@ -133,7 +133,7 @@ body {
 
 .music-panel {
     position: absolute;
-    top: 130px;
+    top: 58px;
     right: 18px;
     z-index: 35;
     width: min(290px, calc(100vw - 28px));
@@ -216,6 +216,10 @@ body {
     text-align: left;
     cursor: pointer;
     transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.music-track__icon {
+    margin-left: 4px;
 }
 
 .music-track:hover {
@@ -1174,11 +1178,11 @@ footer {
         </div>
         <p class="music-panel__caption">Since you mentioned you love songs, here’s a playlist for you.</p>
         <ul class="music-panel__list">
-            <li><button class="music-track" type="button" data-track="a-thousand-years" aria-pressed="false">1. A Thousand Years</button></li>
-            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">2. Until I Found You</button></li>
-            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">3. I Think They Call This Love</button></li>
-            <li><button class="music-track" type="button" data-track="young-and-beautiful" aria-pressed="false">4. Young and Beautiful</button></li>
-            <li><button class="music-track" type="button" data-track="perfect" aria-pressed="false">5. Perfect</button></li>
+            <li><button class="music-track" type="button" data-track="a-thousand-years" aria-pressed="false">1. A Thousand Years <span class="music-track__icon" aria-hidden="true">⏳</span></button></li>
+            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">2. Until I Found You <span class="music-track__icon" aria-hidden="true">💞</span></button></li>
+            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">3. I Think They Call This Love <span class="music-track__icon" aria-hidden="true">💕</span></button></li>
+            <li><button class="music-track" type="button" data-track="young-and-beautiful" aria-pressed="false">4. Young &amp; Beautiful <span class="music-track__icon" aria-hidden="true">✨</span></button></li>
+            <li><button class="music-track" type="button" data-track="perfect" aria-pressed="false">5. Perfect <span class="music-track__icon" aria-hidden="true">💍</span></button></li>
         </ul>
     </div>
 </div>

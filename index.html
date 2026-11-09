@@ -29,7 +29,7 @@ body {
 }
 
 .music-widget {
-    position: fixed;
+    position: absolute;
     top: 72px;
     right: 18px;
     z-index: 30;
@@ -105,8 +105,8 @@ body {
     border: 0;
     border-radius: 999px;
     color: #5f2c33;
-    background: linear-gradient(135deg, #fff3f0 0%, #f5c6d1 40%, #d77a8a 100%);
-    box-shadow: 0 12px 26px rgba(144, 60, 74, 0.25), inset 0 0 12px rgba(255, 255, 255, 0.45);
+    background: linear-gradient(135deg, #fff3f0 0%, #f5c6d1 35%, #d77a8a 100%);
+    box-shadow: 0 18px 32px rgba(144, 60, 74, 0.25), inset 0 0 16px rgba(255, 255, 255, 0.55);
     font: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -116,13 +116,13 @@ body {
 
 .music-list-toggle:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 30px rgba(144, 60, 74, 0.3), inset 0 0 14px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 38px rgba(144, 60, 74, 0.3), inset 0 0 16px rgba(255, 255, 255, 0.7);
 }
 
 .music-list-toggle svg {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     fill: currentColor;
 }
 
@@ -132,7 +132,7 @@ body {
 }
 
 .music-panel {
-    position: fixed;
+    position: absolute;
     top: 130px;
     right: 18px;
     z-index: 35;
@@ -1157,12 +1157,7 @@ footer {
         </span>
     </button>
     <button class="music-list-toggle" id="music-list-toggle" type="button" aria-controls="music-panel" aria-expanded="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h9M4 10h7M4 14h6"></path>
-            <path d="M17 17V5l4-1v11"></path>
-            <ellipse cx="15" cy="18" rx="2" ry="1.5" transform="rotate(-20 15 18)"></ellipse>
-            <ellipse cx="19" cy="16" rx="2" ry="1.5" transform="rotate(-20 19 16)"></ellipse>
-        </svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z"></path></svg>
         <span>Pick a song</span>
     </button>
     <div class="music-panel" id="music-panel" hidden>

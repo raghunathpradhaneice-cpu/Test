@@ -1113,13 +1113,18 @@ footer {
 
     .story-progress {
         right: max(6px, env(safe-area-inset-right, 0px));
-        gap: 4px;
-        padding: 6px 3px;
+        gap: 3px;
+        padding: 5px 2px;
     }
 
     .story-progress__link {
-        width: 24px;
-        height: 24px;
+        width: 21px;
+        height: 21px;
+    }
+
+    .story-progress__link::before {
+        width: 6px;
+        height: 6px;
     }
 
     .note-view {

@@ -1082,7 +1082,7 @@ footer {
 
     .note-links__grid {
         grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
+        gap: 8px;
     }
 
     .note-card {
@@ -1645,7 +1645,7 @@ footer {
 
     .letter__inner {
         grid-template-columns: minmax(0, 1fr);
-        gap: 30px;
+        gap: 8px;
     }
 
     .letter__salutation {
@@ -1657,11 +1657,15 @@ footer {
     }
 
     .letter__caption {
-        margin-top: 22px;
+        margin-top: 16px;
+    }
+
+    .letter__caption::before {
+        margin-bottom: 6px;
     }
 
     .letter__body {
-        padding: 24px 0 0;
+        padding: 8px 0 0;
         border-top: 1px solid #d5cdbd;
         border-left: 0;
     }
@@ -2202,17 +2206,17 @@ footer {
 
 @media (min-width: 701px) {
     .note-links__intro {
-        text-align: center;
+        text-align: left;
     }
 
     .note-links__eyebrow,
     .note-links__heading {
-        text-align: center;
+        text-align: left;
     }
 
     .note-links__rule {
-        margin-right: auto;
-        margin-left: auto;
+        margin-right: 0;
+        margin-left: 0;
     }
 
     .note-card {
@@ -2254,17 +2258,17 @@ footer {
     }
 
     .note-links__intro {
-        text-align: center;
+        text-align: left;
     }
 
     .note-links__eyebrow,
     .note-links__heading {
-        text-align: center;
+        text-align: left;
     }
 
     .note-links__rule {
-        margin-right: auto;
-        margin-left: auto;
+        margin-right: 0;
+        margin-left: 0;
     }
 
     .note-card {
@@ -2372,6 +2376,15 @@ footer {
     font-size: 9px;
     font-weight: 700;
     letter-spacing: .15em;
+}
+
+.opening__eyebrow-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: .25em;
+    fill: #ec4d94;
+    vertical-align: -.12em;
 }
 
 .opening h1 {
@@ -3118,6 +3131,16 @@ footer {
         text-align: center;
     }
 }
+
+@media (max-width: 700px) and (min-height: 501px) {
+    .opening__copy {
+        bottom: calc(164px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .opening__scroll-cue {
+        bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    }
+}
 </style>
 </head>
 
@@ -3170,7 +3193,7 @@ footer {
             <span>A LITTLE NOTE FROM THE HEART</span>
         </div>
         <div class="opening__copy">
-            <p class="eyebrow">💗 Some moments stay with us</p>
+            <p class="eyebrow"><svg class="opening__eyebrow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8.5-5.3-8.5-11.2A4.8 4.8 0 0 1 12 7.1a4.8 4.8 0 0 1 8.5 2.7C20.5 15.7 12 21 12 21Z"></path></svg>Some moments stay with us</p>
             <h1 id="opening-title">Some people<br>feel like <em>home</em><span class="emoji-burst">♥</span></h1>
         </div>
         <a class="opening__scroll-cue" href="#letter">
@@ -3206,7 +3229,7 @@ footer {
         <div class="promises__inner">
             <p class="promises__eyebrow">From my heart, to yours</p>
             <h2 class="promises__heading" id="promises-title">The Way I’ll Be There</h2>
-            <p class="promises__subtitle">A promise in four parts</p>
+            <p class="promises__subtitle">FOUR CHAPTERS OF FOREVER</p>
             <div class="promises__rule" aria-hidden="true"></div>
             <div class="promises__stage">
                 <ol class="promises__timeline" aria-label="Promise chapters">

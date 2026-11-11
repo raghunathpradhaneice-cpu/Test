@@ -350,7 +350,7 @@ body {
     font-weight: 400;
 }
 
-.note-card p {
+.note-card > div p {
     margin: 0;
     color: #554b48;
     font-size: 15px;
@@ -2050,7 +2050,7 @@ footer {
     font-size: 30px;
 }
 
-.note-card p {
+.note-card > div p {
     max-width: 420px;
     color: #344746;
     font-size: 12px;
@@ -2200,6 +2200,40 @@ footer {
     }
 }
 
+@media (min-width: 701px) {
+    .note-links__intro {
+        text-align: center;
+    }
+
+    .note-links__eyebrow,
+    .note-links__heading {
+        text-align: center;
+    }
+
+    .note-links__rule {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .note-card {
+        align-items: center;
+        text-align: center;
+    }
+
+    .note-card__tag {
+        align-self: center;
+    }
+
+    .note-card > div p {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .note-card a {
+        align-self: center;
+    }
+}
+
 @media (max-width: 420px) {
     .note-links {
         padding-right: 18px;
@@ -2219,6 +2253,38 @@ footer {
         flex-basis: 100%;
     }
 
+    .note-links__intro {
+        text-align: center;
+    }
+
+    .note-links__eyebrow,
+    .note-links__heading {
+        text-align: center;
+    }
+
+    .note-links__rule {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .note-card {
+        align-items: center;
+        text-align: center;
+    }
+
+    .note-card__tag {
+        align-self: center;
+    }
+
+    .note-card p {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .note-card a {
+        align-self: center;
+    }
+
     .note-pagination {
         gap: 10px;
     }
@@ -2234,7 +2300,7 @@ footer {
 
     .note-pagination__button {
         min-width: 32px;
-        min-height: 34px;
+        min-height: 44px;
         padding: 0 6px;
     }
 }
@@ -3001,6 +3067,55 @@ footer {
     .opening__bottom {
         font-size: 6px;
         letter-spacing: .04em;
+    }
+}
+
+@media (max-width: 700px) {
+    .opening__copy {
+        align-items: center;
+        text-align: center;
+    }
+
+    .opening h1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .opening__scroll-cue {
+        top: auto;
+        right: auto;
+        bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .opening__scroll-cue:hover {
+        transform: translate(-50%, -2px);
+    }
+
+    .opening__bottom {
+        top: auto;
+        right: max(12px, env(safe-area-inset-right, 0px));
+        bottom: 0;
+        left: max(12px, env(safe-area-inset-left, 0px));
+        display: flex;
+        height: 44px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 5px 0 0;
+        text-align: center;
+    }
+
+    .opening__bottom span:first-child,
+    .opening__bottom span:last-child {
+        position: static;
+        right: auto;
+        bottom: auto;
+        padding: 0;
+        border: 0;
+        text-align: center;
     }
 }
 </style>

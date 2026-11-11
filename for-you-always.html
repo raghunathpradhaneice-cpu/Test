@@ -3100,7 +3100,28 @@ footer {
 
 @media (max-width: 700px) {
     .story-progress {
-        display: none;
+        right: max(6px, env(safe-area-inset-right, 0px));
+        gap: 0;
+        padding: 2px;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .story-progress::before {
+        top: 10px;
+        bottom: 10px;
+    }
+
+    .story-progress__link {
+        width: 16px;
+        height: 16px;
+    }
+
+    .story-progress__link::before {
+        width: 4px;
+        height: 4px;
     }
 
     .opening__copy {

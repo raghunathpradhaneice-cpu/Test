@@ -1113,11 +1113,24 @@ footer {
 
     .story-progress {
         right: max(6px, env(safe-area-inset-right, 0px));
-        gap: 3px;
+        gap: 0;
         padding: 5px 2px;
     }
 
+    .story-progress::before {
+        position: absolute;
+        top: 16px;
+        bottom: 16px;
+        left: 50%;
+        z-index: 0;
+        width: 1px;
+        background: rgba(141, 93, 88, .5);
+        content: "";
+        transform: translateX(-50%);
+    }
+
     .story-progress__link {
+        z-index: 1;
         width: 21px;
         height: 21px;
     }

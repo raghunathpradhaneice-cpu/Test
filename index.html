@@ -3,12 +3,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>For You, Always</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 
 <style>
 * {
@@ -93,6 +93,7 @@ body {
 .music-toggle-label {
     min-width: 34px;
     font-size: 14px;
+    line-height: 1.75;
 }
 
 .music-list-toggle {
@@ -390,12 +391,6 @@ body {
     backdrop-filter: blur(12px);
 }
 
-.note-pagination__pages {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .note-pagination__icon {
     width: 18px;
     height: 18px;
@@ -429,13 +424,6 @@ body {
     box-shadow: 0 8px 18px rgba(115, 76, 72, .12);
 }
 
-.note-pagination__button[aria-current="page"] {
-    border-color: #8d5d58;
-    color: #fffaf5;
-    background: #8d5d58;
-    box-shadow: 0 6px 16px rgba(115, 76, 72, .2);
-}
-
 .note-pagination__button:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -447,15 +435,11 @@ body {
 }
 
 .note-pagination__status {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    min-width: 46px;
+    color: #8d5d58;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
 }
 
 .note-card a:focus-visible,
@@ -522,6 +506,66 @@ body {
     font-size: 14px;
     cursor: pointer;
     touch-action: manipulation;
+}
+
+.story-progress {
+    position: fixed;
+    top: 50%;
+    right: max(14px, env(safe-area-inset-right, 0px));
+    z-index: 40;
+    display: grid;
+    gap: 7px;
+    padding: 8px 5px;
+    border: 1px solid rgba(141, 93, 88, .16);
+    border-radius: 999px;
+    background: rgba(255, 250, 245, .72);
+    box-shadow: 0 8px 24px rgba(39, 35, 33, .12);
+    backdrop-filter: blur(10px);
+    transform: translateY(-50%);
+}
+
+.story-progress__link {
+    position: relative;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: 50%;
+    text-decoration: none;
+}
+
+.story-progress__link::before {
+    width: 7px;
+    height: 7px;
+    border: 1px solid #8d5d58;
+    border-radius: 50%;
+    background: #fffaf5;
+    content: "";
+    transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.story-progress__link[aria-current="location"]::before {
+    transform: scale(1.35);
+    border-color: #b65f64;
+    background: #b65f64;
+    box-shadow: 0 0 0 4px rgba(182, 95, 100, .14);
+}
+
+.story-progress__link:focus-visible {
+    outline: 2px solid #b65f64;
+    outline-offset: 1px;
+}
+
+.story-progress__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .opening {
@@ -1061,14 +1105,21 @@ footer {
         padding: 6px 9px;
     }
 
-    .note-pagination__pages {
-        gap: 5px;
-    }
-
     .note-pagination__button {
         min-width: 42px;
         min-height: 44px;
         padding: 0 11px;
+    }
+
+    .story-progress {
+        right: max(6px, env(safe-area-inset-right, 0px));
+        gap: 4px;
+        padding: 6px 3px;
+    }
+
+    .story-progress__link {
+        width: 24px;
+        height: 24px;
     }
 
     .note-view {
@@ -1161,6 +1212,1498 @@ footer {
         transition-duration: .01ms !important;
     }
 }
+
+:root {
+    color-scheme: dark;
+    --story-night: #120608;
+    --story-burgundy: #26090e;
+    --story-wine: #3b0d14;
+    --story-wine-light: #54151e;
+    --story-gold: #d3b16d;
+    --story-gold-soft: #ead7a8;
+    --story-ivory: #f7efe3;
+    --story-muted: #d2c2b5;
+}
+
+body {
+    color: var(--story-ivory);
+    background:
+        radial-gradient(ellipse at 50% 35%, rgba(86, 20, 31, .26), transparent 58%),
+        var(--story-night);
+    scrollbar-color: var(--story-gold) var(--story-night);
+}
+
+main,
+main section {
+    background-color: var(--story-night);
+}
+
+.music-toggle,
+.music-list-toggle {
+    border: 1px solid rgba(211, 177, 109, .72);
+    color: var(--story-gold-soft);
+    background: linear-gradient(135deg, #451019, #21080c 76%);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35), inset 0 0 16px rgba(211, 177, 109, .08);
+}
+
+.music-toggle:hover,
+.music-list-toggle:hover {
+    border-color: var(--story-gold);
+    background: linear-gradient(135deg, #5a1621, #2a090f 76%);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .42), inset 0 0 18px rgba(211, 177, 109, .12);
+}
+
+.music-toggle.is-playing {
+    box-shadow: 0 0 0 5px rgba(211, 177, 109, .14), 0 12px 30px rgba(0, 0, 0, .35);
+}
+
+.music-toggle:focus-visible,
+.music-list-toggle:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.music-panel {
+    border-color: rgba(211, 177, 109, .35);
+    background: rgba(28, 7, 11, .94);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, .48);
+}
+
+.music-panel__header,
+.note-view__tag {
+    color: var(--story-gold);
+}
+
+.music-panel__caption,
+.music-track {
+    color: var(--story-ivory);
+}
+
+.music-panel__close {
+    border-color: rgba(211, 177, 109, .6);
+    color: var(--story-gold-soft);
+    background: linear-gradient(135deg, #54151e, #26090e);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, .3);
+}
+
+.music-panel__close:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.music-track:hover {
+    border-color: rgba(211, 177, 109, .5);
+    background: rgba(211, 177, 109, .08);
+}
+
+.music-track.is-selected {
+    border-color: rgba(211, 177, 109, .78);
+    background: rgba(111, 32, 44, .48);
+    color: var(--story-gold-soft);
+}
+
+.floating-hearts span {
+    color: rgba(211, 177, 109, .42);
+    text-shadow: 0 0 18px rgba(211, 177, 109, .25);
+}
+
+.note-links {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(88, 18, 30, .42), transparent 65%),
+        linear-gradient(180deg, #20080d, #160609);
+}
+
+.note-links__eyebrow,
+.note-card a,
+.note-card a:hover,
+.note-view__tag {
+    color: var(--story-gold);
+}
+
+.note-links__heading,
+.note-card h3,
+.note-view h3 {
+    color: var(--story-ivory);
+}
+
+.note-card {
+    border-color: rgba(211, 177, 109, .25);
+    background: linear-gradient(145deg, rgba(75, 18, 28, .76), rgba(31, 8, 13, .94));
+    box-shadow: 0 18px 35px rgba(0, 0, 0, .2), inset 0 1px rgba(255, 255, 255, .025);
+}
+
+.note-card:hover {
+    border-color: rgba(211, 177, 109, .55);
+    box-shadow: 0 24px 44px rgba(0, 0, 0, .34), 0 0 26px rgba(126, 35, 49, .14);
+}
+
+.note-card__tag {
+    background: rgba(211, 177, 109, .12);
+    color: var(--story-gold-soft);
+}
+
+.note-card p,
+.note-view__message {
+    color: var(--story-muted);
+}
+
+.note-pagination {
+    border-color: rgba(211, 177, 109, .24);
+    background: rgba(31, 8, 13, .92);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .32);
+}
+
+.note-pagination__button {
+    border-color: rgba(211, 177, 109, .36);
+    color: var(--story-gold-soft);
+    background: rgba(76, 19, 29, .72);
+}
+
+.note-pagination__button:hover:not(:disabled) {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .3);
+}
+
+.note-pagination__button:focus-visible,
+.note-card a:focus-visible,
+.note-view__close:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.note-pagination__status {
+    color: var(--story-gold);
+}
+
+.note-view {
+    border-color: rgba(211, 177, 109, .42);
+    background: linear-gradient(145deg, #3a0d14, #1d070b);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .48);
+}
+
+.note-view::backdrop {
+    background: rgba(12, 3, 5, .82);
+}
+
+.note-view__close {
+    border-color: rgba(211, 177, 109, .48);
+    color: var(--story-gold-soft);
+    background: #2b0a10;
+}
+
+.story-progress {
+    border-color: rgba(211, 177, 109, .3);
+    background: rgba(25, 6, 10, .78);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .32);
+}
+
+.story-progress__link::before {
+    border-color: rgba(211, 177, 109, .72);
+    background: #26090e;
+}
+
+.story-progress__link[aria-current="location"]::before {
+    border-color: var(--story-gold);
+    background: var(--story-gold);
+    box-shadow: 0 0 0 4px rgba(211, 177, 109, .14);
+}
+
+.story-progress__link:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.opening {
+    background: #17070a;
+}
+
+.opening__image {
+    filter: saturate(.9) contrast(1.08);
+}
+
+.opening::before {
+    background:
+        linear-gradient(90deg, rgba(21, 4, 8, .66), rgba(21, 4, 8, .1) 76%),
+        linear-gradient(0deg, rgba(20, 4, 8, .82), rgba(40, 6, 14, .08) 72%);
+}
+
+.opening__top,
+.opening__bottom {
+    color: rgba(247, 239, 227, .82);
+}
+
+.opening__bottom {
+    border-color: rgba(211, 177, 109, .42);
+}
+
+.opening__scroll-cue {
+    border-color: rgba(211, 177, 109, .82);
+    color: var(--story-gold-soft);
+    background: rgba(35, 7, 13, .84);
+    box-shadow: 0 0 0 5px rgba(211, 177, 109, .08), 0 8px 26px rgba(0, 0, 0, .38);
+}
+
+.opening__scroll-cue:hover {
+    background: rgba(79, 16, 29, .94);
+    box-shadow: 0 0 0 7px rgba(211, 177, 109, .13), 0 12px 30px rgba(0, 0, 0, .44);
+}
+
+.opening__scroll-cue:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.eyebrow,
+.opening h1 em,
+.emoji-burst {
+    color: var(--story-gold-soft);
+}
+
+.letter {
+    color: var(--story-ivory);
+    background:
+        radial-gradient(ellipse at 90% 15%, rgba(96, 22, 35, .3), transparent 48%),
+        linear-gradient(155deg, #2d0b11, #1b070b 72%);
+}
+
+.letter__eyebrow,
+.letter__salutation,
+.signoff {
+    color: var(--story-gold);
+}
+
+.letter h2,
+.signature {
+    color: var(--story-ivory);
+}
+
+.letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature) {
+    color: var(--story-muted);
+}
+
+.promises {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(111, 27, 42, .52), transparent 62%),
+        linear-gradient(180deg, #21080d, #140609);
+}
+
+.promises__eyebrow,
+.promise-card__icon {
+    color: var(--story-gold);
+}
+
+.promises__heading,
+.promise-card h3 {
+    color: var(--story-ivory);
+}
+
+.promise-card {
+    border-color: rgba(211, 177, 109, .26);
+    background: linear-gradient(145deg, rgba(84, 21, 30, .7), rgba(34, 8, 13, .86));
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .28);
+}
+
+.promise-card:hover {
+    border-color: rgba(211, 177, 109, .6);
+    background: linear-gradient(145deg, rgba(103, 27, 39, .78), rgba(43, 9, 15, .92));
+}
+
+.promise-card__icon {
+    border-color: rgba(211, 177, 109, .42);
+    background: rgba(211, 177, 109, .08);
+}
+
+.promises__control {
+    border-color: rgba(211, 177, 109, .38);
+    color: var(--story-gold-soft);
+    background: rgba(74, 18, 28, .68);
+}
+
+.promises__control:hover:not(:disabled) {
+    background: rgba(107, 28, 41, .82);
+}
+
+.promises__control:focus-visible {
+    outline-color: var(--story-gold);
+}
+
+.promises__status,
+.promise-card p {
+    color: var(--story-muted);
+}
+
+.seal {
+    color: var(--story-gold);
+}
+
+footer {
+    border-top: 1px solid rgba(211, 177, 109, .18);
+    color: var(--story-muted);
+    background: #100507;
+}
+
+@media (max-width: 600px) {
+    main {
+        background: var(--story-night);
+    }
+}
+
+.letter {
+    position: relative;
+    overflow: hidden;
+    padding: 68px clamp(28px, 8.5vw, 112px) 84px;
+    border-bottom: 7px solid #183b34;
+    color: #172f30;
+    background: #eee9dc;
+}
+
+.letter::after {
+    position: absolute;
+    right: clamp(24px, 3vw, 40px);
+    bottom: 40px;
+    color: #cf8b78;
+    content: "♡";
+    font-family: Georgia, serif;
+    font-size: 30px;
+    line-height: 1;
+}
+
+.letter__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 64px);
+    width: min(1120px, 100%);
+    max-width: none;
+    margin: 0 auto;
+}
+
+.letter__intro {
+    min-width: 0;
+}
+
+.letter__salutation {
+    margin: 0 0 26px;
+    color: #b87961;
+    font-size: 17px;
+}
+
+.letter h2 {
+    max-width: 540px;
+    margin: 0;
+    color: #173537;
+    font-size: clamp(34px, 4vw, 44px);
+    line-height: 1.12;
+}
+
+.letter__caption {
+    margin: 28px 0 0;
+    color: #8e6e5d;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.letter__caption::before {
+    display: block;
+    width: 52px;
+    height: 2px;
+    margin-bottom: 18px;
+    background: #b87961;
+    content: "";
+}
+
+.letter__body {
+    min-width: 0;
+    padding: 14px 0 14px clamp(28px, 4.8vw, 60px);
+    border-left: 1px solid #d5cdbd;
+}
+
+.letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature):not(.letter__caption) {
+    max-width: 490px;
+    margin: 0 0 16px;
+    color: #273f3e;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.letter .signoff {
+    gap: 6px;
+    margin-top: 30px;
+    color: #b87961;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 12px;
+}
+
+.letter .signature {
+    color: #173537;
+    font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+    font-size: clamp(24px, 2.8vw, 28px);
+    font-style: italic;
+    font-weight: 500;
+}
+
+@media (max-width: 760px) {
+    .letter {
+        padding: 54px 26px 76px;
+    }
+
+    .letter__inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 30px;
+    }
+
+    .letter__salutation {
+        margin-bottom: 18px;
+    }
+
+    .letter h2 {
+        font-size: clamp(34px, 9vw, 44px);
+    }
+
+    .letter__caption {
+        margin-top: 22px;
+    }
+
+    .letter__body {
+        padding: 24px 0 0;
+        border-top: 1px solid #d5cdbd;
+        border-left: 0;
+    }
+
+    .letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature):not(.letter__caption) {
+        font-size: 14px;
+    }
+
+    .letter .signoff {
+        margin-top: 24px;
+    }
+
+    .story-progress {
+        display: none;
+    }
+}
+
+.promises {
+    display: block;
+    padding: 66px clamp(28px, 8.5vw, 112px) 28px;
+    color: #f5eee2;
+    background: #19372f;
+}
+
+.promises__inner {
+    width: min(1120px, 100%);
+    max-width: none;
+    margin: 0 auto;
+}
+
+.promises__eyebrow {
+    margin: 0 0 14px;
+    color: #d7a88e;
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-align: left;
+}
+
+.promises__heading {
+    margin: 0;
+    color: #f4eddf;
+    font-size: clamp(36px, 5vw, 46px);
+    text-align: left;
+}
+
+.promises__subtitle {
+    margin: 18px 0 30px;
+    color: #e6d9c8;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.promises__rule {
+    height: 1px;
+    margin-bottom: 24px;
+    background: rgba(235, 222, 198, .18);
+}
+
+.promises__stage {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    align-items: center;
+    gap: 36px;
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.promises__timeline {
+    display: grid;
+    align-content: center;
+    gap: 0;
+    min-height: 210px;
+    padding: 14px 0;
+    margin: 0;
+    list-style: none;
+}
+
+.promises__step {
+    position: relative;
+    display: grid;
+    min-height: 51px;
+    grid-template-columns: 1fr 16px;
+    align-items: center;
+    color: #c9d1c8;
+    font-size: 9px;
+}
+
+.promises__step::after {
+    position: absolute;
+    top: 50%;
+    right: 7px;
+    bottom: -50%;
+    width: 1px;
+    background: rgba(231, 221, 201, .2);
+    content: "";
+}
+
+.promises__step:last-child::after {
+    display: none;
+}
+
+.promises__step[aria-current="step"] {
+    color: #d7a88e;
+}
+
+.promises__step-dot {
+    position: relative;
+    z-index: 1;
+    width: 7px;
+    height: 7px;
+    justify-self: center;
+    border-radius: 50%;
+    background: #8d9f95;
+}
+
+.promises__step[aria-current="step"] .promises__step-dot {
+    width: 10px;
+    height: 10px;
+    background: #d7a88e;
+}
+
+.promises__grid {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.promise-card {
+    min-height: 236px;
+    padding: 38px 42px 32px;
+    border: 0;
+    border-left: 7px solid #c78f75;
+    border-radius: 0 5px 5px 0;
+    color: #183332;
+    background: #eee8da;
+    box-shadow: 0 14px 30px rgba(8, 24, 19, .16);
+    transition: none;
+}
+
+.promise-card:hover {
+    transform: none;
+    border-color: #c78f75;
+    background: #eee8da;
+}
+
+.promise-card__icon {
+    display: none;
+}
+
+.promise-card__chapter {
+    display: block;
+    margin: 0 0 22px;
+    color: #9c6f5a;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .16em;
+}
+
+.promise-card h3 {
+    padding-bottom: 16px;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #dfd6c6;
+    color: #173537;
+    font-size: clamp(23px, 3vw, 28px);
+    text-align: left;
+}
+
+.promise-card p {
+    max-width: 480px;
+    color: #344746;
+    font-size: 12px;
+    line-height: 1.9;
+    text-align: left;
+}
+
+.promises__controls {
+    gap: 5px;
+    margin: 8px 0 0 126px;
+    color: #f5eee2;
+}
+
+.promises__control {
+    min-width: 26px;
+    min-height: 24px;
+    padding: 0 4px;
+    border: 0;
+    border-radius: 0;
+    color: #e7d8c6;
+    background: transparent;
+    font-size: 10px;
+}
+
+.promises__control svg {
+    width: 13px;
+    height: 13px;
+}
+
+.promises__control:hover:not(:disabled) {
+    transform: none;
+    color: #d7a88e;
+    background: transparent;
+}
+
+.promises__control:disabled {
+    opacity: .42;
+}
+
+.promises__control:focus-visible {
+    outline: 1px solid #d7a88e;
+    outline-offset: 1px;
+}
+
+.promises__status {
+    min-width: 48px;
+    color: #f5eee2;
+    font-size: 9px;
+}
+
+@media (max-width: 700px) {
+    .promises {
+        padding: 50px 24px 28px;
+    }
+
+    .promises__stage {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .promises__timeline {
+        min-height: 236px;
+    }
+
+    .promises__step {
+        grid-template-columns: 1fr 12px;
+        font-size: 8px;
+    }
+
+    .promises__step::after {
+        right: 5px;
+    }
+
+    .promise-card {
+        min-height: 236px;
+        padding: 30px 24px;
+    }
+
+    .promises__controls {
+        margin-left: 58px;
+    }
+}
+
+@media (max-width: 420px) {
+    .promises {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .promises__stage {
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .promises__step {
+        grid-template-columns: 1fr 10px;
+    }
+
+    .promises__step::after {
+        right: 4px;
+    }
+
+    .promise-card {
+        padding: 26px 19px;
+    }
+
+    .promises__controls {
+        margin-left: 44px;
+    }
+}
+
+.note-links {
+    padding: 68px clamp(24px, 6vw, 72px) 76px;
+    color: #173537;
+    background: #eee9dc;
+}
+
+.note-links__inner {
+    display: grid;
+    grid-template-columns: minmax(0, .6fr) minmax(0, 1.4fr);
+    align-items: center;
+    gap: clamp(32px, 7vw, 88px);
+    width: min(1120px, 100%);
+    max-width: none;
+    margin: 0 auto;
+}
+
+.note-links__intro {
+    align-self: start;
+    padding-top: 28px;
+}
+
+.note-links__eyebrow {
+    margin: 0 0 18px;
+    color: #a87560;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-align: left;
+}
+
+.note-links__heading {
+    margin: 0;
+    color: #173537;
+    font-size: clamp(34px, 4.5vw, 48px);
+    line-height: 1.03;
+    text-align: left;
+}
+
+.note-links__heading em {
+    display: block;
+    font-weight: 400;
+}
+
+.note-links__rule {
+    width: 132px;
+    height: 2px;
+    margin-top: 24px;
+    background: #bd8065;
+}
+
+.note-links__carousel {
+    min-width: 0;
+}
+
+.note-links__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 20px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.note-card {
+    width: 100%;
+    min-height: 315px;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 44px clamp(26px, 5vw, 42px) 34px;
+    border: 0;
+    border-left: 5px solid #bd8065;
+    border-radius: 0 5px 5px 0;
+    background: #faf7ef;
+    box-shadow: 0 18px 34px rgba(49, 48, 37, .13);
+    text-align: left;
+    transition: opacity .2s ease;
+}
+
+.note-card.is-next {
+    margin-top: 28px;
+    background: #e4dccb;
+    box-shadow: 0 16px 30px rgba(49, 48, 37, .1);
+}
+
+.note-card.is-next:hover {
+    box-shadow: 0 16px 30px rgba(49, 48, 37, .1);
+}
+
+.note-card:hover {
+    transform: none;
+    border-color: #bd8065;
+    box-shadow: 0 18px 34px rgba(49, 48, 37, .13);
+}
+
+.note-card__tag {
+    align-self: flex-start;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: #a56d56;
+    font-size: 9px;
+    letter-spacing: .14em;
+}
+
+.note-card > div {
+    margin-top: 18px;
+}
+
+.note-card h3 {
+    padding-bottom: 16px;
+    margin: 0 0 26px;
+    border-bottom: 1px solid #e3dccf;
+    color: #173537;
+    font-size: 30px;
+}
+
+.note-card p {
+    max-width: 420px;
+    color: #344746;
+    font-size: 12px;
+    line-height: 2;
+}
+
+.note-card a {
+    align-self: flex-start;
+    margin-top: 26px;
+    color: #a56d56;
+    font-size: 9px;
+    letter-spacing: .12em;
+}
+
+.note-card a:hover {
+    color: #79513f;
+}
+
+.note-pagination {
+    position: static;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 30px;
+    margin: 26px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.note-pagination__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border: 1px solid rgba(69, 73, 60, .06);
+    border-radius: 999px;
+    background: #faf7ef;
+    box-shadow: 0 7px 18px rgba(49, 48, 37, .12);
+}
+
+.note-pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.note-pagination__button {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0 8px;
+    border-color: #e2d9c9;
+    color: #bd8065;
+    background: #fffdf8;
+    font-size: 11px;
+}
+
+.note-pagination__button:hover:not(:disabled) {
+    transform: none;
+    box-shadow: 0 3px 8px rgba(49, 48, 37, .12);
+}
+
+.note-pagination__page[aria-current="page"] {
+    border-color: #24463c;
+    color: #fffaf0;
+    background: #24463c;
+}
+
+.note-pagination__button:disabled {
+    opacity: .48;
+}
+
+.note-pagination__button:focus-visible,
+.note-card a:focus-visible {
+    outline-color: #bd8065;
+}
+
+.note-pagination__status {
+    min-width: 38px;
+    color: #756d5e;
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.note-view {
+    border-color: #d7c6ae;
+    background: #faf7ef;
+}
+
+.note-view h3 {
+    color: #173537;
+}
+
+.note-view__message {
+    color: #344746;
+}
+
+.note-view__close {
+    border-color: #d4b8a5;
+    color: #79513f;
+    background: #f2ecdf;
+}
+
+@media (max-width: 700px) {
+    .note-links {
+        padding: 52px 24px 64px;
+    }
+
+    .note-links__inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+
+    .note-links__intro {
+        padding-top: 0;
+    }
+
+    .note-links__heading {
+        font-size: clamp(36px, 9vw, 46px);
+    }
+
+    .note-card {
+        min-height: 275px;
+        padding: 32px 26px;
+    }
+
+    .note-links__grid {
+        display: flex;
+        gap: 16px;
+        overflow: hidden;
+        padding: 0 22px 18px 0;
+    }
+
+    .note-card {
+        flex: 0 0 82%;
+    }
+
+    .note-card.is-next {
+        margin-top: 28px;
+    }
+
+    .note-card h3 {
+        margin-bottom: 20px;
+    }
+
+    .note-pagination {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .note-links {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .note-card {
+        min-height: 260px;
+        padding: 28px 22px;
+    }
+
+    .note-links__grid {
+        padding-right: 16px;
+    }
+
+    .note-card {
+        flex-basis: 86%;
+    }
+
+    .note-pagination {
+        gap: 10px;
+    }
+
+    .note-pagination__controls {
+        gap: 4px;
+        padding: 4px 6px;
+    }
+
+    .note-pagination__pages {
+        gap: 3px;
+    }
+
+    .note-pagination__button {
+        min-width: 32px;
+        min-height: 34px;
+        padding: 0 6px;
+    }
+}
+
+.opening {
+    display: grid;
+    grid-template-columns: 41.5% minmax(0, 58.5%);
+    min-height: 620px;
+    height: 88svh;
+    max-height: 900px;
+    align-items: stretch;
+    color: #f5eee2;
+    background: #19372f;
+}
+
+.opening__image {
+    inset: 0 0 0 41.5%;
+    z-index: 0;
+    width: 58.5%;
+    height: 100%;
+    object-position: 54% center;
+    filter: saturate(.78) contrast(1.06);
+}
+
+.opening::before {
+    z-index: 1;
+    background:
+        linear-gradient(0deg, rgba(13, 22, 18, .64), transparent 38%),
+        linear-gradient(90deg, rgba(17, 29, 24, .38), rgba(17, 29, 24, .08) 30%, rgba(17, 29, 24, .12));
+}
+
+.opening::after {
+    z-index: 2;
+    opacity: .08;
+}
+
+.opening__top {
+    z-index: 4;
+    top: 28px;
+    right: 6%;
+    left: 6.5%;
+    color: #e8dccb;
+    font-size: 9px;
+    letter-spacing: .12em;
+}
+
+.opening__top span:first-child {
+    color: #d7a88e;
+    font-weight: 700;
+}
+
+.opening__copy {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    width: auto;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    grid-column: 1;
+    padding: 94px clamp(28px, 6.5vw, 72px) 118px;
+    animation: rise-in 1s .2s ease both;
+}
+
+.opening .eyebrow {
+    margin-bottom: 48px;
+    color: #e1b599;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .15em;
+}
+
+.opening h1 {
+    max-width: 390px;
+    color: #f5eee2;
+    font-size: clamp(38px, 4.2vw, 54px);
+    line-height: 1.08;
+}
+
+.opening h1 em,
+.opening .emoji-burst {
+    color: #d7a88e;
+}
+
+.opening h1 em {
+    font-style: italic;
+}
+
+.opening .emoji-burst {
+    margin-left: 0;
+}
+
+.opening__scroll-cue {
+    z-index: 4;
+    bottom: 34px;
+    left: clamp(28px, 6.5vw, 72px);
+    min-height: 42px;
+    padding: 0 18px;
+    border-color: rgba(226, 211, 190, .6);
+    color: #f5eee2;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.opening__scroll-cue:hover {
+    background: rgba(245, 238, 226, .08);
+    box-shadow: 0 0 0 4px rgba(245, 238, 226, .06);
+    transform: translateY(-2px);
+}
+
+.opening__scroll-cue:focus-visible {
+    outline-color: #e1b599;
+}
+
+.opening__scroll-cue span {
+    font-size: 9px;
+    letter-spacing: .11em;
+}
+
+.opening__scroll-cue svg {
+    width: 14px;
+    height: 14px;
+    animation: none;
+}
+
+.opening__bottom {
+    z-index: 4;
+    right: 6%;
+    bottom: 0;
+    left: 6.5%;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    color: #f5eee2;
+    font-size: 8px;
+    letter-spacing: .1em;
+}
+
+.opening__bottom span:first-child {
+    position: absolute;
+    bottom: calc(88px + 1.5vw);
+    left: 0;
+    color: #e8dccb;
+}
+
+.opening__bottom span:last-child {
+    position: absolute;
+    right: 0;
+    bottom: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(235, 222, 198, .32);
+    text-align: right;
+}
+
+@media (max-width: 700px) {
+    .opening {
+        display: block;
+        min-height: 0;
+        height: auto;
+        max-height: none;
+        padding-top: 430px;
+        padding-bottom: min(58svh, 470px);
+    }
+
+    .opening__image {
+        inset: 430px 0 0;
+        width: 100%;
+        height: calc(100% - 430px);
+        object-position: center 38%;
+    }
+
+    .opening::before {
+        background:
+            linear-gradient(0deg, rgba(13, 22, 18, .62), transparent 44%),
+            linear-gradient(180deg, rgba(25, 55, 47, 0), rgba(17, 29, 24, .14));
+    }
+
+    .opening__copy {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 430px;
+        padding: 82px 28px 112px;
+    }
+
+    .opening .eyebrow {
+        margin-bottom: 28px;
+    }
+
+    .opening h1 {
+        max-width: 360px;
+        font-size: clamp(42px, 10vw, 56px);
+    }
+
+    .opening__top {
+        top: 20px;
+        right: 24px;
+        left: 28px;
+        font-size: 8px;
+    }
+
+    .opening__scroll-cue {
+        top: 342px;
+        bottom: auto;
+        left: 28px;
+        min-height: 40px;
+    }
+
+    .opening__bottom {
+        top: 430px;
+        right: 24px;
+        bottom: auto;
+        left: 28px;
+        height: auto;
+    }
+
+    .opening__bottom span:first-child {
+        top: -30px;
+        bottom: auto;
+    }
+
+    .opening__bottom span:last-child {
+        right: 0;
+        bottom: auto;
+        padding-top: 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    .opening {
+        padding-top: 400px;
+        padding-bottom: min(62svh, 440px);
+    }
+
+    .opening__image {
+        inset: 400px 0 0;
+        height: calc(100% - 400px);
+    }
+
+    .opening__copy {
+        height: 400px;
+        padding-right: 20px;
+        padding-left: 22px;
+    }
+
+    .opening .eyebrow {
+        margin-bottom: 24px;
+        font-size: 8px;
+    }
+
+    .opening h1 {
+        font-size: 42px;
+    }
+
+    .opening__top {
+        right: 18px;
+        left: 22px;
+        font-size: 7px;
+    }
+
+    .opening__scroll-cue {
+        top: 320px;
+        left: 22px;
+    }
+
+    .opening__bottom {
+        top: 400px;
+        right: 18px;
+        left: 22px;
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 700px) {
+    main {
+        padding-top: 0;
+    }
+
+    .music-widget {
+        top: calc(64px + env(safe-area-inset-top, 0px));
+        right: max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    .music-panel {
+        right: 0;
+    }
+
+    .opening__copy {
+        padding-left: max(22px, env(safe-area-inset-left, 0px));
+    }
+
+    .opening__scroll-cue {
+        left: max(22px, env(safe-area-inset-left, 0px));
+        min-height: 44px;
+    }
+
+    .opening__top {
+        left: max(22px, env(safe-area-inset-left, 0px));
+    }
+
+    .opening__bottom {
+        left: max(22px, env(safe-area-inset-left, 0px));
+        right: max(18px, env(safe-area-inset-right, 0px));
+    }
+
+    .letter {
+        padding-left: max(24px, env(safe-area-inset-left, 0px));
+        padding-right: max(24px, env(safe-area-inset-right, 0px));
+    }
+
+    .promises {
+        padding-left: max(24px, env(safe-area-inset-left, 0px));
+        padding-right: max(24px, env(safe-area-inset-right, 0px));
+    }
+
+    .promises__control {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .promises__control svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .note-links {
+        padding-left: max(24px, env(safe-area-inset-left, 0px));
+        padding-right: max(24px, env(safe-area-inset-right, 0px));
+    }
+
+    .note-card a {
+        min-height: 44px;
+    }
+
+    .promise-card p {
+        font-size: 14px;
+        line-height: 1.75;
+    }
+
+    .note-card p {
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .note-pagination__button {
+        min-width: 38px;
+        min-height: 44px;
+    }
+
+    .note-card a {
+        font-size: 10px;
+        letter-spacing: .08em;
+    }
+
+    .note-view__message {
+        font-size: 16px;
+        line-height: 1.75;
+    }
+
+    .note-view__close {
+        min-height: 44px;
+    }
+
+    .note-pagination__status {
+        font-size: 11px;
+    }
+
+    .opening__scroll-cue span {
+        font-size: 9px;
+    }
+
+    .opening__intro {
+        font-size: 16px;
+    }
+
+    .letter p:not(.letter__eyebrow):not(.letter__salutation):not(.signature):not(.letter__caption) {
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .letter .signoff {
+        font-size: 13px;
+    }
+
+    .note-pagination__controls {
+        touch-action: manipulation;
+    }
+
+    .note-view {
+        max-height: 85dvh;
+        padding-bottom: max(26px, env(safe-area-inset-bottom, 0px));
+    }
+
+    footer {
+        padding-bottom: max(22px, env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media (max-width: 420px) {
+    .promises {
+        padding-left: max(18px, env(safe-area-inset-left, 0px));
+        padding-right: max(18px, env(safe-area-inset-right, 0px));
+    }
+
+    .note-links {
+        padding-left: max(18px, env(safe-area-inset-left, 0px));
+        padding-right: max(18px, env(safe-area-inset-right, 0px));
+    }
+
+    .note-pagination {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .note-pagination__controls {
+        gap: 2px;
+        padding: 4px;
+    }
+
+    .note-pagination__pages {
+        gap: 2px;
+    }
+
+    .note-pagination__button {
+        min-width: 38px;
+        min-height: 44px;
+        padding: 0 6px;
+    }
+
+    .note-pagination__status {
+        min-height: 16px;
+        text-align: center;
+    }
+}
+
+@media (max-height: 500px) and (min-width: 701px) {
+    .opening {
+        min-height: 420px;
+        height: 100svh;
+    }
+
+    .opening__copy {
+        padding-top: 86px;
+        padding-bottom: 94px;
+    }
+
+    .opening .eyebrow {
+        margin-bottom: 24px;
+    }
+
+    .opening h1 {
+        font-size: clamp(38px, 5vw, 48px);
+    }
+}
 </style>
 </head>
 
@@ -1199,8 +2742,14 @@ footer {
     <span>♥</span>
     <span>♡</span>
 </div>
+<nav class="story-progress" aria-label="Story sections">
+    <a class="story-progress__link" href="#hero" aria-label="Go to the opening" aria-current="location"><span class="story-progress__label">Opening</span></a>
+    <a class="story-progress__link" href="#letter" aria-label="Go to the love letter"><span class="story-progress__label">Love letter</span></a>
+    <a class="story-progress__link" href="#promises" aria-label="Go to the promises"><span class="story-progress__label">Promises</span></a>
+    <a class="story-progress__link" href="#notes-section" aria-label="Go to the little notes"><span class="story-progress__label">Little notes</span></a>
+</nav>
 <main>
-    <section class="opening" aria-labelledby="opening-title">
+    <section class="opening" id="hero" aria-labelledby="opening-title">
         <img class="opening__image" src="photo.jpg" alt="A portrait surrounded by flowers">
         <div class="opening__top" aria-hidden="true">
             <span>FOR YOU, ALWAYS</span>
@@ -1222,27 +2771,42 @@ footer {
 
     <section class="letter" id="letter" aria-labelledby="letter-title">
         <div class="letter__inner">
-            <p class="letter__salutation">Dear you,</p>
-            <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
-            <p>The day I met you, something changed in me. Though we’re still getting to know each other, every conversation with you brings a smile to my face.</p>
-            <p>I can’t promise you the whole world, but I promise to stand by you, choose you through every high and low, and always make you feel loved and valued.</p>
-            <p>I don’t know what tomorrow holds, but I know I’d love to discover it with you — building beautiful memories, a happy home, and, hopefully, a lifetime together.</p>
-            <div class="signoff">
-                <span>With all my heart 💕</span>
-                <p class="signature">To someone I’m happy to have met</p>
+            <div class="letter__intro">
+                <p class="letter__salutation">Dear you,</p>
+                <h2 id="letter-title">💞 The day I met you, something changed in me.</h2>
+                <p class="letter__caption">A letter, from the heart</p>
+            </div>
+            <div class="letter__body">
+                <p>The day I met you, something changed in me. Though we’re still getting to know each other, every conversation with you brings a smile to my face.</p>
+                <p>I can’t promise you the whole world, but I promise to stand by you, choose you through every high and low, and always make you feel loved and valued.</p>
+                <p>I don’t know what tomorrow holds, but I know I’d love to discover it with you — building beautiful memories, a happy home, and, hopefully, a lifetime together.</p>
+                <div class="signoff">
+                    <span>With all my heart 💕</span>
+                    <p class="signature">To someone I’m happy to have met</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="promises" aria-labelledby="promises-title">
+    <section class="promises" id="promises" aria-labelledby="promises-title">
         <div class="promises__inner">
             <p class="promises__eyebrow">From my heart, to yours</p>
             <h2 class="promises__heading" id="promises-title">The Way I’ll Be There</h2>
-            <div class="promises__grid" id="promises-slides">
+            <p class="promises__subtitle">A promise in four parts</p>
+            <div class="promises__rule" aria-hidden="true"></div>
+            <div class="promises__stage">
+                <ol class="promises__timeline" aria-label="Promise chapters">
+                    <li class="promises__step" aria-current="step"><span>01</span><span class="promises__step-dot"></span></li>
+                    <li class="promises__step"><span>02</span><span class="promises__step-dot"></span></li>
+                    <li class="promises__step"><span>03</span><span class="promises__step-dot"></span></li>
+                    <li class="promises__step"><span>04</span><span class="promises__step-dot"></span></li>
+                </ol>
+                <div class="promises__grid" id="promises-slides">
                 <article class="promise-card" aria-roledescription="slide">
                     <span class="promise-card__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-5.5a7.5 7.5 0 1 1 17-4Z"></path><path d="M8 11h8M8 14h5"></path></svg>
                     </span>
+                    <span class="promise-card__chapter">01 / LISTENING</span>
                     <h3>I will really listen</h3>
                     <p>I promise to make room for your thoughts and feelings—not just hear your words, but try to understand what matters to you.</p>
                 </article>
@@ -1250,6 +2814,7 @@ footer {
                     <span class="promise-card__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2M8 2.8 6.5 4M16 2.8 17.5 4"></path></svg>
                     </span>
+                    <span class="promise-card__chapter">02 / SHOWING UP</span>
                     <h3>I will show up</h3>
                     <p>On ordinary days and difficult ones, I promise to be present, steady, and someone you can count on.</p>
                 </article>
@@ -1257,6 +2822,7 @@ footer {
                     <span class="promise-card__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 10-8.8 10s-8.8-4.8-8.8-10A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"></path><path d="m8.8 11.5 2 2 4.5-4.5"></path></svg>
                     </span>
+                    <span class="promise-card__chapter">03 / KINDNESS</span>
                     <h3>I will choose kindness</h3>
                     <p>Even when we disagree, I promise to speak with care, be honest, and meet you with respect.</p>
                 </article>
@@ -1264,9 +2830,11 @@ footer {
                     <span class="promise-card__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M12 20s-8-4.4-8-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.6-8 10-8 10Z"></path><path d="M8 12h2l1.2-2.2L13 15l1.2-3H16"></path></svg>
                     </span>
+                    <span class="promise-card__chapter">04 / CHOOSING US</span>
                     <h3>I will keep choosing us</h3>
                     <p>I promise to keep learning, growing, and making time for the little moments that make a life feel like ours.</p>
                 </article>
+                </div>
             </div>
             <div class="promises__controls" role="group" aria-label="Promise navigation">
                 <button class="promises__control" id="promises-previous" type="button" aria-label="Previous promise">
@@ -1282,9 +2850,13 @@ footer {
 
     <section class="note-links" id="notes-section" aria-labelledby="notes-title">
         <div class="note-links__inner">
-            <p class="note-links__eyebrow">A few words from my heart</p>
-            <h2 class="note-links__heading" id="notes-title">Little notes, just for you</h2>
-            <div class="note-links__grid">
+            <div class="note-links__intro">
+                <p class="note-links__eyebrow">A few words from my heart</p>
+                <h2 class="note-links__heading" id="notes-title">Little notes,<em>just for you</em></h2>
+                <div class="note-links__rule" aria-hidden="true"></div>
+            </div>
+            <div class="note-links__carousel">
+                <div class="note-links__grid">
                 <article class="note-card">
                     <span class="note-card__tag">💞 First meeting</span>
                     <div>
@@ -1320,17 +2892,20 @@ footer {
                     </div>
                     <a href="#" data-message="We may still be getting to know each other, so here's a small, cheerful reminder to take a break and smile. I hope it makes your day a little brighter. 😄">Read my note →</a>
                 </article>
+                </div>
+                <nav class="note-pagination" aria-label="Little notes carousel controls">
+                    <div class="note-pagination__controls" role="group">
+                        <button class="note-pagination__button" id="notes-previous" type="button" aria-label="Previous note">
+                            <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                        </button>
+                        <div class="note-pagination__pages" id="notes-pages" role="group" aria-label="Choose a note"></div>
+                        <button class="note-pagination__button" id="notes-next" type="button" aria-label="Next note">
+                            <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        </button>
+                    </div>
+                    <span class="note-pagination__status" id="notes-page-status" aria-live="polite" aria-atomic="true"></span>
+                </nav>
             </div>
-            <nav class="note-pagination" aria-label="Notes pagination">
-                <button class="note-pagination__button" id="notes-previous" type="button" aria-label="Previous notes page">
-                    <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
-                </button>
-                <div class="note-pagination__pages" id="notes-pages"></div>
-                <button class="note-pagination__button" id="notes-next" type="button" aria-label="Next notes page">
-                    <svg class="note-pagination__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
-                </button>
-                <span class="note-pagination__status" id="notes-page-status" aria-live="polite"></span>
-            </nav>
             <dialog class="note-view" id="note-view" aria-labelledby="note-view-title">
                 <p class="note-view__tag" id="note-view-tag"></p>
                 <h3 id="note-view-title" tabindex="-1"></h3>
@@ -1469,15 +3044,23 @@ footer {
   const promisesStatus = document.getElementById('promises-status');
   const promisesPrevious = document.getElementById('promises-previous');
   const promisesNext = document.getElementById('promises-next');
+  const promiseSteps = Array.from(document.querySelectorAll('.promises__step'));
   let currentPromise = 0;
 
   function showPromise(index) {
-        currentPromise = Math.max(0, Math.min(index, promiseSlides.length - 1));
+    currentPromise = Math.max(0, Math.min(index, promiseSlides.length - 1));
     promiseSlides.forEach((slide, slideIndex) => {
       slide.hidden = slideIndex !== currentPromise;
     });
-        promisesPrevious.disabled = currentPromise === 0;
-        promisesNext.disabled = currentPromise === promiseSlides.length - 1;
+    promiseSteps.forEach((step, stepIndex) => {
+      if (stepIndex === currentPromise) {
+        step.setAttribute('aria-current', 'step');
+      } else {
+        step.removeAttribute('aria-current');
+      }
+    });
+    promisesPrevious.disabled = currentPromise === 0;
+    promisesNext.disabled = currentPromise === promiseSlides.length - 1;
     promisesStatus.textContent = `${currentPromise + 1} of ${promiseSlides.length}`;
   }
 
@@ -1492,49 +3075,80 @@ footer {
   const noteViewTitle = document.getElementById('note-view-title');
   const noteViewMessage = document.getElementById('note-view-message');
   const noteViewClose = document.getElementById('note-view-close');
-  const notesPages = document.getElementById('notes-pages');
   const notesPrevious = document.getElementById('notes-previous');
   const notesNext = document.getElementById('notes-next');
+  const notesPages = document.getElementById('notes-pages');
   const notesPageStatus = document.getElementById('notes-page-status');
-  const notesPerPage = 2;
+  const notesPerPage = 1;
   const totalNotesPages = Math.ceil(noteCards.length / notesPerPage);
   let currentNotesPage = 0;
   let activeNoteLink = null;
 
-  function showNotesPage(page, shouldScroll = false) {
+  function showNotesPage(page) {
     currentNotesPage = Math.max(0, Math.min(page, totalNotesPages - 1));
     activeNoteLink = null;
 
     noteCards.forEach((card, index) => {
-      card.hidden = Math.floor(index / notesPerPage) !== currentNotesPage;
+      const isActive = index === currentNotesPage;
+      const isNext = index === currentNotesPage + 1;
+      card.hidden = !isActive && !isNext;
+      card.classList.toggle('is-active', isActive);
+      card.classList.toggle('is-next', isNext);
+      if (isActive) {
+        card.setAttribute('aria-current', 'true');
+      } else {
+        card.removeAttribute('aria-current');
+      }
     });
 
     notesPages.replaceChildren();
     for (let pageIndex = 0; pageIndex < totalNotesPages; pageIndex++) {
       const pageButton = document.createElement('button');
-      pageButton.className = 'note-pagination__button';
+      pageButton.className = 'note-pagination__button note-pagination__page';
       pageButton.type = 'button';
       pageButton.textContent = String(pageIndex + 1);
-      pageButton.setAttribute('aria-label', `Notes page ${pageIndex + 1}`);
+      pageButton.setAttribute('aria-label', `Show note ${pageIndex + 1}`);
       if (pageIndex === currentNotesPage) {
         pageButton.setAttribute('aria-current', 'page');
       }
-      pageButton.addEventListener('click', () => showNotesPage(pageIndex, true));
+      pageButton.addEventListener('click', () => showNotesPage(pageIndex));
       notesPages.append(pageButton);
     }
 
     notesPrevious.disabled = currentNotesPage === 0;
     notesNext.disabled = currentNotesPage === totalNotesPages - 1;
-    notesPageStatus.textContent = `Notes page ${currentNotesPage + 1} of ${totalNotesPages}`;
+    notesPageStatus.textContent = `${currentNotesPage + 1} / ${totalNotesPages}`;
 
-    if (shouldScroll) {
-      document.getElementById('notes-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }
 
-  notesPrevious.addEventListener('click', () => showNotesPage(currentNotesPage - 1, true));
-  notesNext.addEventListener('click', () => showNotesPage(currentNotesPage + 1, true));
+  notesPrevious.addEventListener('click', () => showNotesPage(currentNotesPage - 1));
+  notesNext.addEventListener('click', () => showNotesPage(currentNotesPage + 1));
   showNotesPage(0);
+
+  const storyProgressLinks = Array.from(document.querySelectorAll('.story-progress__link'));
+  const storySections = storyProgressLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  const storyProgressObserver = new IntersectionObserver((entries) => {
+    const activeEntry = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+
+    if (!activeEntry) {
+      return;
+    }
+
+    storyProgressLinks.forEach((link) => {
+      if (link.hash === `#${activeEntry.target.id}`) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }, { rootMargin: '-35% 0px -45% 0px', threshold: 0 });
+
+  storySections.forEach((section) => storyProgressObserver.observe(section));
 
   noteLinks.forEach((link) => {
     link.addEventListener('click', function (event) {

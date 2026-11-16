@@ -35,8 +35,11 @@ body {
     z-index: 30;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
     gap: 10px;
+    max-width: min(540px, calc(100vw - 36px));
 }
 
 .music-toggle {
@@ -2611,6 +2614,13 @@ footer {
     .music-widget {
         top: calc(64px + env(safe-area-inset-top, 0px));
         right: max(12px, env(safe-area-inset-right, 0px));
+        gap: 8px;
+        max-width: calc(100vw - 24px);
+    }
+
+    .music-toggle,
+    .music-list-toggle {
+        min-height: 42px;
     }
 
     .music-panel {
@@ -3203,11 +3213,12 @@ footer {
         </div>
         <p class="music-panel__caption">Since you mentioned you love songs, here’s a playlist for you.</p>
         <ul class="music-panel__list">
-            <li><button class="music-track" type="button" data-track="a-thousand-years" aria-pressed="false">1. A Thousand Years <span class="music-track__icon" aria-hidden="true">⏳</span></button></li>
-            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">2. Until I Found You <span class="music-track__icon" aria-hidden="true">💞</span></button></li>
-            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">3. I Think They Call This Love <span class="music-track__icon" aria-hidden="true">💕</span></button></li>
-            <li><button class="music-track" type="button" data-track="young-and-beautiful" aria-pressed="false">4. Young &amp; Beautiful <span class="music-track__icon" aria-hidden="true">✨</span></button></li>
-            <li><button class="music-track" type="button" data-track="perfect" aria-pressed="false">5. Perfect <span class="music-track__icon" aria-hidden="true">💍</span></button></li>
+            <li><button class="music-track" type="button" data-track="tum-se-hi" aria-pressed="false">1. Tum Se Hi <span class="music-track__icon" aria-hidden="true">❤️</span></button></li>
+            <li><button class="music-track" type="button" data-track="shayad" aria-pressed="false">2. Shayad <span class="music-track__icon" aria-hidden="true">🌙</span></button></li>
+            <li><button class="music-track" type="button" data-track="raabta" aria-pressed="false">3. Raabta <span class="music-track__icon" aria-hidden="true">✨</span></button></li>
+            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">4. I Think They Call This Love <span class="music-track__icon" aria-hidden="true">💌</span></button></li>
+            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">5. Until I Found You <span class="music-track__icon" aria-hidden="true">💞</span></button></li>
+            
         </ul>
     </div>
 </div>
@@ -3340,7 +3351,7 @@ footer {
                         <h3>That day</h3>
                         <p>I met you and I liked you as a person before I even knew how much you would mean to me.</p>
                     </div>
-                    <a href="#" data-message="We did not talk much, but I felt something good about you from the very beginning — the way you carry yourself and the calm, beautiful presence you have. I had heard a lot about you before meeting you, and every bit of it turned out to be true. ✨">Read my note →</a>
+                    <a href="#" data-message="We did not talk much, but I felt something special about you from the very beginning — the way you carry yourself and your beautiful presence. I had heard a lot about you before meeting you, and every bit of it turned out to be true. ✨">Read my note →</a>
                 </article>
 
                 <article class="note-card">
@@ -3403,10 +3414,11 @@ footer {
   const musicPanelClose = document.getElementById('music-panel-close');
   const musicTrackButtons = Array.from(document.querySelectorAll('.music-track'));
   const musicLibrary = {
-    'a-thousand-years': 'AThousandYears.mp3',
-    'until-i-found-you': 'Until I Found You.mp3',
+    'tum-se-hi': 'Tum Se Hi.mp3',
+    shayad: 'Shayad.mp3',
+    raabta: 'Raabta.mp3',
     'they-call-this-love': 'I think they call this love.mp3',
-    'young-and-beautiful': 'Young and Beautiful.mp3',
+    'until-i-found-you': 'Until I Found You.mp3',
     perfect: 'Perfect.mp3'
   };
   let selectedTrack = null;

@@ -2225,61 +2225,18 @@ footer {
     }
 
     .note-pagination__controls {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: fit-content;
-        padding: 6px 12px;
-        border: 1px solid rgba(211, 177, 109, .28);
-        border-radius: 999px;
-        background: rgba(31, 8, 13, .74);
-        box-shadow: 0 8px 22px rgba(0, 0, 0, .22), inset 0 0 10px rgba(211, 177, 109, .04);
+        gap: 4px;
+        padding: 4px 6px;
     }
 
     .note-pagination__pages {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+        gap: 3px;
     }
 
     .note-pagination__button {
-        min-width: 42px;
-        min-height: 42px;
-        padding: 0 12px;
-    }
-
-    .note-pagination__page {
-        min-width: 10px;
-        min-height: 10px;
-        width: 10px;
-        height: 10px;
-        padding: 0;
-        border: 1px solid rgba(211, 177, 109, .46);
-        border-radius: 50%;
-        background: rgba(211, 177, 109, .14);
-        color: transparent;
-        font-size: 0;
-        line-height: 0;
-        box-shadow: none;
-    }
-
-    .note-pagination__button:hover:not(:disabled) {
-        transform: none;
-        box-shadow: none;
-    }
-
-    .note-pagination__button:disabled {
-        opacity: .35;
-    }
-
-    .note-pagination__page[aria-current="page"] {
-        width: 12px;
-        height: 12px;
-        border-color: rgba(211, 177, 109, .9);
-        background: linear-gradient(135deg, #ebc78f, #c88a78);
-        box-shadow: 0 0 0 4px rgba(211, 177, 109, .12);
+        min-width: 32px;
+        min-height: 44px;
+        padding: 0 6px;
     }
 
     .note-pagination__status {
@@ -3666,7 +3623,7 @@ footer {
       const pageButton = document.createElement('button');
       pageButton.className = 'note-pagination__button note-pagination__page';
       pageButton.type = 'button';
-      pageButton.textContent = '';
+      pageButton.textContent = String(pageIndex + 1);
       pageButton.setAttribute('aria-label', `Show note ${pageIndex + 1}`);
       if (pageIndex === currentNotesPage) {
         pageButton.setAttribute('aria-current', 'page');

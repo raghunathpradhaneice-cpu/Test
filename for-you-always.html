@@ -208,6 +208,9 @@ body {
 }
 
 .music-track {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     width: 100%;
     padding: 10px 12px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -222,8 +225,28 @@ body {
     transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
+.music-track__title {
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-track__artist {
+    margin-left: auto;
+    padding: 3px 6px;
+    border: 1px solid rgba(211, 177, 109, .38);
+    border-radius: 999px;
+    color: var(--story-gold-soft);
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 .music-track__icon {
-    margin-left: 4px;
+    flex: 0 0 auto;
 }
 
 .music-track:hover {
@@ -3408,11 +3431,11 @@ footer {
         </div>
         <p class="music-panel__caption">Since you mentioned you love songs, here’s a playlist for you.</p>
         <ul class="music-panel__list">
-            <li><button class="music-track" type="button" data-track="tum-se-hi" aria-pressed="false">1. Tum Se Hi <span class="music-track__icon" aria-hidden="true">❤️</span></button></li>
-            <li><button class="music-track" type="button" data-track="shayad" aria-pressed="false">2. Shayad <span class="music-track__icon" aria-hidden="true">🌙</span></button></li>
-            <li><button class="music-track" type="button" data-track="raabta" aria-pressed="false">3. Raabta <span class="music-track__icon" aria-hidden="true">✨</span></button></li>
-            <li><button class="music-track" type="button" data-track="they-call-this-love" aria-pressed="false">4. I Think They Call This Love <span class="music-track__icon" aria-hidden="true">💌</span></button></li>
-            <li><button class="music-track" type="button" data-track="until-i-found-you" aria-pressed="false">5. Until I Found You <span class="music-track__icon" aria-hidden="true">💞</span></button></li>
+            <li><button class="music-track" type="button" data-track="apna-bana-le" aria-pressed="false"><span class="music-track__title">1. Apna Bana Le</span><span class="music-track__icon" aria-hidden="true">❤️</span><span class="music-track__artist">Arijit Singh</span></button></li>
+            <li><button class="music-track" type="button" data-track="shayad" aria-pressed="false"><span class="music-track__title">2. Shayad</span><span class="music-track__icon" aria-hidden="true">🌙</span><span class="music-track__artist">Arijit Singh</span></button></li>
+            <li><button class="music-track" type="button" data-track="raabta" aria-pressed="false"><span class="music-track__title">3. Raabta</span><span class="music-track__icon" aria-hidden="true">✨</span><span class="music-track__artist">Arijit Singh</span></button></li>
+            <li><button class="music-track" type="button" data-track="pal" aria-pressed="false"><span class="music-track__title">4. Pal</span><span class="music-track__icon" aria-hidden="true">🫂</span><span class="music-track__artist">Shreya Ghoshal</span></button></li>
+            <li><button class="music-track" type="button" data-track="soniyo" aria-pressed="false"><span class="music-track__title">5. Soniyo</span><span class="music-track__icon" aria-hidden="true">🌹</span><span class="music-track__artist">Shreya Ghoshal</span></button></li>
             
         </ul>
     </div>
@@ -3644,11 +3667,11 @@ footer {
   const musicPanelClose = document.getElementById('music-panel-close');
   const musicTrackButtons = Array.from(document.querySelectorAll('.music-track'));
   const musicLibrary = {
-    'tum-se-hi': 'Tum Se Hi.mp3',
+    'apna-bana-le': 'Apna Bana Le.mp3',
     shayad: 'Shayad.mp3',
     raabta: 'Raabta.mp3',
-    'they-call-this-love': 'I think they call this love.mp3',
-    'until-i-found-you': 'Until I Found You.mp3',
+    pal: 'Pal.mp3',
+    soniyo: 'Soniyo.mp3',
     perfect: 'Perfect.mp3'
   };
   let selectedTrack = null;

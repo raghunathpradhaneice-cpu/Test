@@ -3220,6 +3220,140 @@ footer {
         bottom: calc(82px + env(safe-area-inset-bottom, 0px));
     }
 }
+
+.rcb-gallery {
+    padding: 88px 24px 96px;
+    color: #fff8f1;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(196, 24, 53, .32), transparent 58%),
+        #211719;
+    text-align: center;
+}
+
+.rcb-gallery__inner {
+    width: min(100%, 760px);
+    margin: 0 auto;
+}
+
+.rcb-gallery__eyebrow {
+    margin: 0 0 12px;
+    color: #efb85b;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.rcb-gallery__heading {
+    margin: 0;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(34px, 7vw, 52px);
+    font-weight: 400;
+}
+
+.rcb-gallery__intro {
+    max-width: 530px;
+    margin: 14px auto 34px;
+    color: rgba(255, 248, 241, .78);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.rcb-gallery__stage {
+    overflow: hidden;
+    border: 1px solid rgba(239, 184, 91, .35);
+    border-radius: 20px;
+    background: #171315;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+}
+
+.rcb-gallery__slide[hidden] {
+    display: none;
+}
+
+.rcb-gallery__image {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center 38%;
+}
+
+.rcb-gallery__slide:first-child .rcb-gallery__image {
+    object-position: center 70%;
+}
+
+.rcb-gallery__caption {
+    padding: 18px 22px 22px;
+    color: #f3d9b2;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 23px;
+    font-style: italic;
+}
+
+.rcb-gallery__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 22px;
+}
+
+.rcb-gallery__control {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border: 1px solid rgba(239, 184, 91, .52);
+    border-radius: 50%;
+    color: #fff8f1;
+    background: transparent;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.rcb-gallery__control:hover {
+    transform: translateY(-2px);
+    background: rgba(196, 24, 53, .45);
+}
+
+.rcb-gallery__control:focus-visible {
+    outline: 3px solid #efb85b;
+    outline-offset: 3px;
+}
+
+.rcb-gallery__control svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.rcb-gallery__status {
+    min-width: 55px;
+    color: #f3d9b2;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+    .rcb-gallery {
+        padding: 70px 18px 78px;
+    }
+
+    .rcb-gallery__image {
+        aspect-ratio: 3 / 4;
+    }
+
+    .rcb-gallery__caption {
+        padding: 15px 16px 18px;
+        font-size: 21px;
+    }
+}
 </style>
 </head>
 
@@ -3264,6 +3398,7 @@ footer {
     <a class="story-progress__link" href="#letter" aria-label="Go to the love letter"><span class="story-progress__label">Love letter</span></a>
     <a class="story-progress__link" href="#promises" aria-label="Go to the promises"><span class="story-progress__label">Promises</span></a>
     <a class="story-progress__link" href="#notes-section" aria-label="Go to the little notes"><span class="story-progress__label">Little notes</span></a>
+    <a class="story-progress__link" href="#rcb-gallery" aria-label="Go to our RCB slideshow"><span class="story-progress__label">RCB memories</span></a>
 </nav>
 <main>
     <section class="opening" id="hero" aria-labelledby="opening-title">
@@ -3431,6 +3566,37 @@ footer {
             </dialog>
         </div>
     </section>
+
+    <section class="rcb-gallery" id="rcb-gallery" aria-labelledby="rcb-gallery-title">
+        <div class="rcb-gallery__inner">
+            <p class="rcb-gallery__eyebrow">One team, two fans</p>
+            <h2 class="rcb-gallery__heading" id="rcb-gallery-title">Our RCB moments</h2>
+            <p class="rcb-gallery__intro">We both love RCB and are fans of Virat Kohli. We may not have celebrated together yet, but it’s lovely to share the same team spirit and look forward to more cricket moments. ❤️</p>
+            <div class="rcb-gallery__stage" aria-live="polite">
+                <figure class="rcb-gallery__slide" aria-roledescription="slide" aria-label="1 of 3">
+                    <img class="rcb-gallery__image" src="wp15467083.jpg" alt="Virat Kohli celebrating with the trophy in his RCB jersey" loading="lazy">
+                    <figcaption class="rcb-gallery__caption">That winning feeling—and a team we both love cheering for.</figcaption>
+                </figure>
+                <figure class="rcb-gallery__slide" aria-roledescription="slide" aria-label="2 of 3" hidden>
+                    <img class="rcb-gallery__image" src="wp15466971.jpg" alt="Virat Kohli and a fellow RCB fan celebrating with the trophy" loading="lazy">
+                    <figcaption class="rcb-gallery__caption">A trophy moment for the team we both cheer on.</figcaption>
+                </figure>
+                <figure class="rcb-gallery__slide" aria-roledescription="slide" aria-label="3 of 3" hidden>
+                    <img class="rcb-gallery__image" src="wp15466960.jpg" alt="RCB players celebrating together with the trophy" loading="lazy">
+                    <figcaption class="rcb-gallery__caption">For the team, the cheers, and all the memories still to come.</figcaption>
+                </figure>
+            </div>
+            <div class="rcb-gallery__controls" role="group" aria-label="RCB slideshow controls">
+                <button class="rcb-gallery__control" id="rcb-previous" type="button" aria-label="Previous RCB photo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+                <span class="rcb-gallery__status" id="rcb-status" aria-live="polite" aria-atomic="true"></span>
+                <button class="rcb-gallery__control" id="rcb-next" type="button" aria-label="Next RCB photo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
 </main>
 <footer>Made of memories, laughter, and a little bit of magic</footer>
 
@@ -3585,6 +3751,24 @@ footer {
   promisesPrevious.addEventListener('click', () => showPromise(currentPromise - 1));
   promisesNext.addEventListener('click', () => showPromise(currentPromise + 1));
   showPromise(0);
+
+  const rcbSlides = Array.from(document.querySelectorAll('.rcb-gallery__slide'));
+  const rcbStatus = document.getElementById('rcb-status');
+  const rcbPrevious = document.getElementById('rcb-previous');
+  const rcbNext = document.getElementById('rcb-next');
+  let currentRcbSlide = 0;
+
+  function showRcbSlide(index) {
+    currentRcbSlide = (index + rcbSlides.length) % rcbSlides.length;
+    rcbSlides.forEach((slide, slideIndex) => {
+      slide.hidden = slideIndex !== currentRcbSlide;
+    });
+    rcbStatus.textContent = `${currentRcbSlide + 1} of ${rcbSlides.length}`;
+  }
+
+  rcbPrevious.addEventListener('click', () => showRcbSlide(currentRcbSlide - 1));
+  rcbNext.addEventListener('click', () => showRcbSlide(currentRcbSlide + 1));
+  showRcbSlide(0);
 
   const noteCards = Array.from(document.querySelectorAll('.note-card'));
   const noteLinks = document.querySelectorAll('[data-message]');
